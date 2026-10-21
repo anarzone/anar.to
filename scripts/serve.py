@@ -44,6 +44,8 @@ class Handler(http.server.SimpleHTTPRequestHandler):
     def end_headers(self):
         for k, v in HEADERS.items():
             self.send_header(k, v)
+        if self.path.split('?', 1)[0].endswith(('.html', '/')):
+            self.send_header('Cache-Control', 'no-cache, no-transform')
         super().end_headers()
 
     def log_message(self, *args):
