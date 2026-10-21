@@ -1,0 +1,100 @@
+<!-- Machine: Curiplay's product decisions, "one answer, two ledgers". Numbers and rules follow lexis-app (feat/SYN-29, 2026-10-19). -->
+<dialog id="m-cp" class="zd mach" aria-labelledby="lp-h">
+  <div class="zd-bar"><p>Stage 4b · Curiplay · Cat 1 climb</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <div class="zd-body mach-body">
+    <header class="mach-head">
+      <div>
+        <p class="kicker">Ride the climb</p>
+        <h2 class="mach-title" id="lp-h" tabindex="-1">Only learning pays.</h2>
+        <p class="mach-dek">In Curiplay every answer writes to two ledgers: your memory, scheduled with FSRS-6, and the money for your café. I designed them so they can't drift apart. Only a real review pays, practice pays nothing, and café levels come only from learning. Answer five café words and watch both.</p>
+      </div>
+      <div class="lp-totals">
+        <p><span>Money</span><b id="lp-money">$0</b></p>
+        <p><span>Stars</span><b id="lp-stars">☆☆☆</b></p>
+        <p><span>Words scheduled</span><b id="lp-sched">0</b></p>
+      </div>
+    </header>
+
+    <div class="lp-grid">
+      <section class="lp-round" aria-labelledby="lp-round-h">
+        <h3 id="lp-round-h" class="visually-hidden">The round</h3>
+        <div class="lp-pips" id="lp-pips" aria-hidden="true"></div>
+        <div class="lp-card" id="lp-card">
+          <span class="lp-art" id="lp-art">der</span>
+          <p class="lp-word" id="lp-word">Kaffee</p>
+          <p class="lp-prompt" id="lp-prompt">Pick a tile. Trust your memory.</p>
+        </div>
+        <div class="lp-tiles" id="lp-tiles"></div>
+        <p class="lp-feedback" id="lp-feedback" role="status"></p>
+        <div class="lp-results" id="lp-results" hidden>
+          <p class="lp-res-h">Your knowledge keeps working.</p>
+          <p class="lp-res-stars" id="lp-res-stars"></p>
+          <p class="lp-res-money" id="lp-res-money"></p>
+          <p class="lp-res-rush">After a round it's rush hour: for 150 seconds guests come twice as often and tips double.</p>
+          <button type="button" class="ride" id="lp-again">Play the round again ▸</button>
+        </div>
+      </section>
+
+      <section class="panel lp-ledgers" aria-labelledby="lp-led-h">
+        <h3 id="lp-led-h">Two ledgers</h3>
+        <div class="lp-cols">
+          <div><h4>Memory <small>FSRS-6</small></h4><ol id="lp-mem"></ol></div>
+          <div><h4>Money</h4><ol id="lp-cash"></ol></div>
+        </div>
+      </section>
+    </div>
+
+    <div class="lp-grid2">
+      <section class="panel lp-cafe" aria-labelledby="lp-cafe-h">
+        <h3 id="lp-cafe-h">The café level</h3>
+        <div class="lp-meter"><i id="lp-meter"></i></div>
+        <p class="lp-level" id="lp-level">Level 1. Level 2 needs 2 ★, and stars come only from learning.</p>
+        <div class="lp-pads" id="lp-pads"></div>
+        <button type="button" class="linkish" id="lp-idle">What if I only play the café?</button>
+        <p class="lp-idle" id="lp-idle-p" hidden>A test bot playing only the café makes about $10 a minute at level 1 and buys all three level-1 upgrades in about 12 minutes. Then it stops at the level-2 gate, because money can't buy stars. The café never earns while the app is closed.</p>
+      </section>
+
+      <section class="panel lp-time" aria-labelledby="lp-time-h">
+        <h3 id="lp-time-h">Come back when it's due <small id="lp-time-word">der Kaffee</small></h3>
+        <ol class="lp-stamps" id="lp-stamps"></ol>
+        <div class="lp-time-actions">
+          <button type="button" class="ride" id="lp-due">Answer it on the due day ▸</button>
+          <button type="button" class="ride ghost" id="lp-forget" hidden>Forget it once ▸</button>
+          <button type="button" class="ride ghost" id="lp-drill">Drill it now, before it's due</button>
+        </div>
+        <p class="lp-time-p" id="lp-time-p">A word starts as Learning. Each time you remember it on the due day, the gap grows.</p>
+      </section>
+    </div>
+
+    <section class="lp-decisions" aria-labelledby="lp-dec-h">
+      <h3 id="lp-dec-h">Decisions behind it</h3>
+      <ul>
+        <li><b>Practice pays $0.</b> Drilling words that aren't due would be a farming loop, not learning.</li>
+        <li><b>No idle income.</b> The café earns nothing while the app is closed. Only learning money waits at the door.</li>
+        <li><b>Recognising isn't knowing.</b> A word only counts as Known after you've recalled it from the meaning at least once.</li>
+        <li><b>A wrong answer weakens, it doesn't reset.</b> The word drops into relearning instead of back to new.</li>
+        <li><b>Ruhetag.</b> One automatic rest day a week keeps your streak, like a Viennese café. Curiosity, not guilt.</li>
+        <li><b>Staff stay slower than you.</b> Otherwise the café plays itself and gets boring.</li>
+      </ul>
+    </section>
+
+    <details class="panel code">
+      <summary>What runs underneath</summary>
+      <pre><code>if ($review->wasRecorded && ! $review->wasPractice && $review->event->is_correct) {
+    $coins = self::COINS_PER_CORRECT;                       // 3
+    $newStreak = $currentStreak + 1;
+    if ($newStreak % self::STREAK_BONUS_INTERVAL === 0) {   // every 3
+        $coins += min(intdiv($newStreak, 3), self::MAX_STREAK_BONUS); // capped at 3
+    }
+}</code></pre>
+      <ul class="lp-under">
+        <li>Every answer runs in one database transaction with the user and session rows locked. The answer's event id makes a retried request harmless.</li>
+        <li>Each answer is stored as an immutable review event with the memory state before and after.</li>
+        <li>The scheduler is FSRS-6, checked against the reference py-fsrs: 0 mismatches over 2,478 reviews.</li>
+        <li>An answer only moves the schedule when the word was due or new. Anything else is stored as practice.</li>
+        <li>There is one balance and the server owns it. The café shows it; café earnings are capped at $400 a minute.</li>
+      </ul>
+    </details>
+    <p class="mach-note">Curiplay is in development. The words, money rules, star thresholds, prices and intervals come from its code (the intervals from its scheduler test: answering on the due day, no fuzz).</p>
+  </div>
+</dialog>

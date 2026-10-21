@@ -1,0 +1,174 @@
+<dialog id="fg" aria-labelledby="fg-title">
+  <div class="fg-shell">
+    <div class="fg-top">
+      <p class="fg-title" id="fg-title"><img src="{{FG_ICON}}" alt="" width="30" height="30"> FocusGuard <span>· for macOS</span></p>
+      <button class="fg-close" type="button" data-close aria-label="Close the FocusGuard demo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+
+    <header class="fg-hero">
+      <div class="fg-hero-copy">
+        <p class="fg-eyebrow">Menu-bar app for macOS · free</p>
+        <h2 class="fg-h">Notices when you drift. Nudges you back.</h2>
+        <p class="fg-lead">A Mac menu-bar focus timer that notices when you drift, and nudges you back before an hour disappears.</p>
+      </div>
+      <div class="fg-hero-side">
+        <div class="fg-install">
+          <div class="fg-cmd"><code id="fg-brew-top">brew install --cask anarzone/tap/focusguard</code><button type="button" data-copy="fg-brew-top">Copy</button></div>
+          <a class="fg-dl" href="https://github.com/anarzone/FocusGuard/releases/latest" target="_blank" rel="noopener">Download on GitHub</a>
+        </div>
+        <ul class="fg-facts" aria-label="At a glance">
+          <li>Free</li><li>macOS 14 or later</li><li>No account</li><li>History stored on your Mac</li>
+        </ul>
+      </div>
+    </header>
+
+    <section class="fg-play" aria-labelledby="fg-play-h">
+      <div class="fg-grid">
+        <div class="fg-stage">
+          <h3 class="visually-hidden" id="fg-play-h">A working model of FocusGuard</h3>
+          <div class="mac" id="fg-mac">
+            <div class="mac-bar">
+              <span class="app" id="fg-front-name">Safari</span>
+              <span class="menus" aria-hidden="true"><span>File</span><span>Edit</span><span>View</span><span>Window</span><span>Help</span></span>
+              <span class="spacer"></span>
+              <button class="status-item" id="fg-status" type="button" data-a="menu" aria-expanded="true" aria-controls="fg-menu" aria-label="FocusGuard in the menu bar">
+                <svg id="fg-shield" viewBox="0 0 16 16" aria-hidden="true"></svg><span id="fg-status-time"></span>
+              </button>
+              <span class="mb-clock" id="fg-clock"></span>
+            </div>
+
+            <section class="win win-browser front" id="fg-w-browser" data-win="browser" aria-label="Browser">
+              <div class="titlebar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="urlbar" id="fg-url">github.com/anarzone/FocusGuard</span></div>
+              <nav class="bookmarks" aria-label="Sites">
+                <button class="bm" type="button" data-a="site" data-v="gh"><span class="fav" style="background:#1F2328">G</span>github.com</button>
+                <button class="bm" type="button" data-a="site" data-v="yt"><span class="fav" style="background:#E62117">Y</span>youtube.com</button>
+                <button class="bm" type="button" data-a="site" data-v="rd"><span class="fav" style="background:#FF4500">r</span>reddit.com</button>
+                <button class="bm" type="button" data-a="site" data-v="hn"><span class="fav" style="background:#FF6600">Y</span>news.ycombinator.com</button>
+                <button class="bm" type="button" data-a="site" data-v="x"><span class="fav" style="background:#000">X</span>x.com</button>
+              </nav>
+              <div class="page-area">
+                <div class="site site-gh" data-page="gh">
+                  <h3>anarzone / FocusGuard</h3>
+                  <p class="repo-meta">Public · Swift · free</p>
+                  <p style="margin:12px 0 0;font-size:13px">Native macOS menu-bar app that tracks focus sessions, classifies activity, and escalates distractions from silent log → notification → full-screen block. Privacy-first, all data local.</p>
+                  <pre>brew install --cask anarzone/tap/focusguard</pre>
+                </div>
+                <div class="site site-yt" data-page="yt" hidden>
+                  <div><div class="player" aria-hidden="true"></div><p class="vid-title">Just one more video</p><p class="vid-meta">Recommended for you</p></div>
+                  <div class="up-next" aria-label="Up next"><div><i></i><span>Cats versus cucumbers, part 4</span></div><div><i></i><span>I did nothing for three hours</span></div><div><i></i><span>You'll start working after this one</span></div></div>
+                </div>
+                <div class="site site-rd" data-page="rd" hidden>
+                  <div class="post"><b>r/mildlyinteresting</b>This rock looks exactly like a potato.</div>
+                  <div class="post"><b>r/programming</b>Is PHP dead? (2026 edition, part 31)</div>
+                  <div class="post"><b>r/cycling</b>Rate my commute bike. Be honest.</div>
+                </div>
+                <div class="site site-hn" data-page="hn" hidden>
+                  <div class="hn-bar">Hacker News</div>
+                  <ol><li>Show HN: A menu-bar bouncer for your attention <span>· 112 comments</span></li><li>Ask HN: How do you stop doomscrolling? <span>· 341 comments</span></li><li>The case for boring backends <span>· 87 comments</span></li><li>Why your deploys take an hour <span>· 59 comments</span></li></ol>
+                </div>
+                <div class="site site-x" data-page="x" hidden>
+                  <div class="post"><b>@someone</b>hot take: tabs vs spaces is settled. it's tabs.</div>
+                  <div class="post"><b>@someone_else</b>no.</div>
+                  <div class="post"><b>@a_third_person</b>this thread is why I can't get anything done</div>
+                </div>
+              </div>
+            </section>
+
+            <section class="win win-editor" id="fg-w-editor" data-win="editor" aria-label="PhpStorm">
+              <div class="titlebar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span>Visitor.php · anar.to</span></div>
+<pre class="ed-code"><span class="k">&lt;?php</span>
+
+<span class="c">// This page runs on a server in Germany.</span>
+<span class="k">final class</span> Visitor
+{
+    <span class="k">public function</span> <span class="f">__construct</span>(
+        <span class="k">private readonly</span> string $name = <span class="s">'you'</span>,
+    ) {}
+
+    <span class="k">public function</span> <span class="f">greet</span>(): string
+    {
+        <span class="k">return</span> <span class="s">"Hallo, {$this-&gt;name}. Back to work?"</span>;
+    }
+}</pre>
+            </section>
+
+            <section class="win win-chat" id="fg-w-chat" data-win="chat" aria-label="Discord">
+              <div class="titlebar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span># general</span></div>
+              <div class="chat"><p><b>mila</b> anyone up for a ride after work?</p><p><b>jonas</b> only if it's flat</p><p><b>mila</b> it's Köln, everything is flat</p></div>
+            </section>
+
+            <section class="fgw" id="fg-win" hidden aria-label="FocusGuard window"></section>
+
+            <div class="dock" aria-label="Dock">
+              <button type="button" class="d-ps" data-a="app" data-v="editor" aria-label="PhpStorm" aria-pressed="false">PS</button>
+              <button type="button" class="d-br" data-a="app" data-v="browser" aria-label="Safari" aria-pressed="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8z" fill="#fff"></path></svg>
+              </button>
+              <button type="button" class="d-ch" data-a="app" data-v="chat" aria-label="Discord" aria-pressed="false">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M4 5h16v11H9l-4 3.5V16H4z"></path></svg>
+              </button>
+              <button type="button" class="d-fg" data-a="win" data-v="today" aria-label="Open the FocusGuard window"><img src="{{FG_ICON}}" alt="" width="44" height="44"></button>
+            </div>
+
+            <div class="notif" id="fg-notif" role="status" aria-live="polite">
+              <img src="{{FG_ICON}}" alt="" width="38" height="38">
+              <div><b id="fg-n-title"></b><p id="fg-n-body"></p></div>
+              <time>now</time>
+            </div>
+
+            <div class="m-panel" id="fg-menu" role="group" aria-label="FocusGuard menu"></div>
+
+            <div class="brk" id="fg-break" hidden role="dialog" aria-modal="false" aria-label="Break"></div>
+
+            <div class="block" id="fg-block" hidden role="alertdialog" aria-modal="false" aria-labelledby="fg-b-h">
+              <div class="block-inner">
+                <p class="away-pill"><span class="fav" id="fg-b-fav" style="background:#E62117">Y</span><span id="fg-b-pill">youtube.com · 1:30 away from Deep work</span></p>
+                <h2 id="fg-b-h">Let's get back to Deep work.</h2>
+                <p class="sub" id="fg-b-sub"></p>
+                <div class="ring" id="fg-b-ring"></div>
+                <p class="zone-line" id="fg-b-zone"></p>
+                <div class="block-btns">
+                  <button type="button" class="b-back" data-a="back" id="fg-b-back">Back to PhpStorm</button>
+                  <button type="button" class="b-work" data-a="forwork" id="fg-b-work">It's for work</button>
+                  <button type="button" class="b-through" data-a="through" id="fg-b-through" aria-disabled="true"><svg viewBox="0 0 20 20" aria-hidden="true" id="fg-b-count"></svg><span>Let me through</span></button>
+                </div>
+                <p class="keys"><span><kbd>esc</kbd> back to work</span><span><kbd>return</kbd> <span id="fg-b-keyhint">let me through, in 5 s</span></span></p>
+              </div>
+            </div>
+
+            <div class="fg-toast" id="fg-toast" role="status" aria-live="polite" hidden></div>
+          </div>
+        </div>
+
+        <aside class="fg-guide" aria-labelledby="fg-guide-h">
+          <h3 id="fg-guide-h">Show me</h3>
+          <p class="tag">Everything on the Mac screen is clickable. Or press a button here and watch it happen.</p>
+          <ol class="g-steps">
+            <li><button type="button" data-a="g" data-v="drift"><b>It notices when you drift</b><span>Open YouTube during a session: logged quietly, then a nudge, then a calm pause screen.</span></button></li>
+            <li><button type="button" data-a="g" data-v="apps"><b>You decide what counts</b><span>Every app and site is Focus, Neutral or Distracting. Flip one and it applies straight away.</span></button></li>
+            <li><button type="button" data-a="g" data-v="quick"><b>Gentle, Standard or Strict</b><span>Pick how fast it steps in. Strict pauses the screen the moment you drift.</span></button></li>
+            <li><button type="button" data-a="g" data-v="insights"><b>Your day at a glance</b><span>Focus rate, sessions, top apps and a week of bars, right from the menu.</span></button></li>
+            <li><button type="button" data-a="g" data-v="end"><b>Recap, then a real break</b><span>End the session for the recap, then take a break with a breathing guide.</span></button></li>
+            <li><button type="button" data-a="g" data-v="ready"><b>Twist to set the length</b><span>Drag the dial or the ruler, from 5 minutes to 8 hours, then start.</span></button></li>
+            <li><button type="button" data-a="g" data-v="music"><b>Music that follows the session</b><span>A playlist starts with the session, pauses with it and stops when it ends.</span></button></li>
+            <li><button type="button" data-a="g" data-v="reports"><b>Reports, and optional AI tips</b><span>Off by default. Bring your own key; only a summary is sent, never window titles or full URLs.</span></button></li>
+            <li><button type="button" data-a="g" data-v="privacy"><b>Your history, on your Mac</b><span>Stored locally with no account. Keep window titles out per app, and choose how long history is kept.</span></button></li>
+          </ol>
+          <div class="g-ladder">
+            <p class="g-k">How it escalates <span id="fg-preset-name">Standard</span></p>
+            <ol class="ladder2" id="fg-ladder">
+              <li><b>Log it quietly</b><small id="fg-l1">at 10 s</small><span class="bar"><span></span></span></li>
+              <li><b>Nudge</b><small id="fg-l2">at 30 s</small><span class="bar"><span></span></span></li>
+              <li><b>Pause the screen</b><small id="fg-l3">at 90 s</small><span class="bar"><span></span></span></li>
+            </ol>
+          </div>
+          <div class="speed-row"><span id="fg-speed-l">Demo clock runs in real time</span><button type="button" class="pill-s" id="fg-speed" data-a="speed">Speed up 6×</button></div>
+          <button type="button" class="fg-reset" data-a="reset">Reset the demo</button>
+        </aside>
+      </div>
+    </section>
+    <p class="fg-credit">A working model of FocusGuard 0.3.23 with sample data. The real app runs natively on your Mac.</p>
+  </div>
+</dialog>

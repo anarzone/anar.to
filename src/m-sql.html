@@ -1,0 +1,53 @@
+<!-- Machine: SQL time trial. A real SQLite (sql.js) runs in the browser on a generated job board. -->
+<dialog id="m-sql" class="zd mach" aria-labelledby="sq-h">
+  <div class="zd-bar"><p>The playbox · SQL time trial</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <div class="zd-body mach-body">
+    <header class="mach-head">
+      <div>
+        <p class="kicker">Ride against the clock</p>
+        <h2 class="mach-title" id="sq-h" tabindex="-1">Race the query.</h2>
+        <p class="mach-dek">A real SQLite database is running in your browser, filled with a made-up job board: <b id="sq-rows">92,400</b> rows. Three stages from my work on raw SQL: kill an N+1, climb with an index, write the report in one query. The clock is real.</p>
+      </div>
+      <div class="sq-jerseys" aria-label="Jerseys won">
+        <p class="sq-j" data-j="0"><svg viewBox="0 0 100 96" aria-hidden="true"><path class="jz-g" d="M34 6 Q50 16 66 6 L84 13 L98 36 L84 45 L78 37 L78 92 Q50 96 22 92 L22 37 L16 45 L2 36 L16 13 Z"/></svg><span>Green<br>sprint</span></p>
+        <p class="sq-j" data-j="1"><svg viewBox="0 0 100 96" aria-hidden="true"><defs><pattern id="sq-polka" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="16" height="16" fill="#fff"/><circle cx="4" cy="4" r="3.2" fill="#E2233A"/><circle cx="12" cy="12" r="3.2" fill="#E2233A"/></pattern></defs><path class="jz-p" d="M34 6 Q50 16 66 6 L84 13 L98 36 L84 45 L78 37 L78 92 Q50 96 22 92 L22 37 L16 45 L2 36 L16 13 Z"/></svg><span>Polka<br>climb</span></p>
+        <p class="sq-j" data-j="2"><svg viewBox="0 0 100 96" aria-hidden="true"><path class="jz-y" d="M34 6 Q50 16 66 6 L84 13 L98 36 L84 45 L78 37 L78 92 Q50 96 22 92 L22 37 L16 45 L2 36 L16 13 Z"/></svg><span>Yellow<br>report</span></p>
+      </div>
+    </header>
+
+    <div class="sq-tabs" role="tablist" aria-label="Stages">
+      <button type="button" role="tab" data-stage="0" aria-selected="true">1 · The N+1 sprint</button>
+      <button type="button" role="tab" data-stage="1" aria-selected="false">2 · The index climb</button>
+      <button type="button" role="tab" data-stage="2" aria-selected="false">3 · One-query report</button>
+      <button type="button" role="tab" data-stage="3" aria-selected="false">Free ride</button>
+    </div>
+
+    <div class="sq-grid">
+      <section class="panel sq-brief" aria-live="polite">
+        <h3 id="sq-stage-h">The N+1 sprint</h3>
+        <p id="sq-stage-p"></p>
+        <pre class="sq-legacy" id="sq-legacy"></pre>
+        <div class="sq-brief-btns">
+          <button type="button" class="ride ghost" id="sq-old">Run the old way ▸</button>
+          <button type="button" class="linkish" id="sq-line">Stuck? Borrow my fix</button>
+        </div>
+        <div class="sq-score" id="sq-score"></div>
+        <details class="sq-schema"><summary>The tables</summary><pre id="sq-schema-p"></pre></details>
+      </section>
+
+      <section class="panel sq-play">
+        <div class="sq-ed-top"><label for="sq-sql">Your SQL</label><span>Ctrl or ⌘ + Enter runs it</span></div>
+        <textarea id="sq-sql" class="sq-sql" spellcheck="false" autocomplete="off" autocapitalize="off" rows="8"></textarea>
+        <div class="sq-run-row">
+          <button type="button" class="arcade" id="sq-run">Run ▸</button>
+          <span class="sq-clock" id="sq-clock" aria-live="polite">–</span>
+          <button type="button" class="linkish" id="sq-reset">Reset the database</button>
+        </div>
+        <p class="sq-msg" id="sq-msg" role="status"></p>
+        <div class="sq-plan" id="sq-plan"></div>
+        <div class="sq-out" id="sq-out"></div>
+      </section>
+    </div>
+    <p class="mach-note">The data is generated in your browser with a fixed seed: companies, jobs and applications on a pretend job board. Timings are measured live and depend on your device. SQLite here, MySQL and PostgreSQL at work: the lessons carry over.</p>
+  </div>
+</dialog>

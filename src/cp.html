@@ -1,0 +1,151 @@
+<dialog id="cp" aria-label="Curiplay quick quiz" data-scene="quiz">
+  <main class="page">
+    <header class="masthead">
+      <div class="brand"><span class="ms" aria-hidden="true">neurology</span> Curiplay</div>
+      <span class="edition">Quick quiz · six words from the app</span>
+    </header>
+
+    <!-- 1 · The quiz board (markup and classes from Curiplay's approved v6 quiz) -->
+    <section class="board" data-cp-board data-phase="question" aria-label="Curiplay quick quiz" tabindex="-1">
+      <h1 class="sr-only">Quick quiz</h1>
+      <div class="arena-bar">
+        <button type="button" class="exit" data-close aria-label="Close the quiz"><span class="ms" aria-hidden="true">close</span></button>
+        <div class="round-progress">
+          <p class="round-label" data-cp-round>Card 1 of 6</p>
+          <ol class="pips" aria-label="Round progress">
+            <li class="pip" data-cp-pip><span class="ms" aria-hidden="true"></span></li>
+            <li class="pip" data-cp-pip><span class="ms" aria-hidden="true"></span></li>
+            <li class="pip" data-cp-pip><span class="ms" aria-hidden="true"></span></li>
+            <li class="pip" data-cp-pip><span class="ms" aria-hidden="true"></span></li>
+            <li class="pip" data-cp-pip><span class="ms" aria-hidden="true"></span></li>
+            <li class="pip" data-cp-pip><span class="ms" aria-hidden="true"></span></li>
+          </ol>
+        </div>
+        <div class="arena-right">
+          <button type="button" class="exit sound-toggle" data-cp-sound aria-pressed="true" aria-label="Sound"><span class="ms" aria-hidden="true">volume_up</span></button>
+          <div class="streak" data-cp-streak-badge data-lit="false" role="img" aria-label="0 correct in a row">
+            <span class="ms" aria-hidden="true">local_fire_department</span><span data-cp-streak aria-hidden="true">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div data-cp-question-area>
+        <h2 class="question-title" data-cp-question-title tabindex="-1" aria-describedby="cp-word">What does it mean?</h2>
+        <div class="playfield">
+          <div class="deck-stage">
+            <span class="spark spark--one" aria-hidden="true"></span>
+            <span class="spark spark--two" aria-hidden="true"></span>
+            <div class="word-object">
+              <div class="card-back card-back--rose" aria-hidden="true"></div>
+              <div class="card-back card-back--amber" aria-hidden="true"></div>
+              <div class="word-face">
+                <div class="card-meta">
+                  <span class="language"><span class="ms" aria-hidden="true">translate</span> German</span>
+                  <span class="level"><span class="sr-only">Level </span><span data-cp-level>A1</span></span>
+                </div>
+                <h3 id="cp-word" class="word" lang="de"><span data-article data-gender="der">der</span><span data-word>Kaffee</span></h3>
+                <div class="card-foot"><span>Noun</span><span class="ms" aria-hidden="true">neurology</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="answer-station">
+            <p class="choose-label" id="cp-answer-heading">Choose the English meaning</p>
+            <div class="answers" role="group" aria-labelledby="cp-answer-heading cp-word">
+              <button type="button" class="answer" data-cp-answer aria-disabled="false" aria-keyshortcuts="1">
+                <span class="answer-key" aria-hidden="true"><span class="answer-number">1</span><span class="ms answer-icon" data-answer-icon></span></span>
+                <span class="answer-label" data-answer-label>coffee</span><span class="sr-only" data-answer-status></span>
+              </button>
+              <button type="button" class="answer" data-cp-answer aria-disabled="false" aria-keyshortcuts="2">
+                <span class="answer-key" aria-hidden="true"><span class="answer-number">2</span><span class="ms answer-icon" data-answer-icon></span></span>
+                <span class="answer-label" data-answer-label>tea</span><span class="sr-only" data-answer-status></span>
+              </button>
+              <button type="button" class="answer" data-cp-answer aria-disabled="false" aria-keyshortcuts="3">
+                <span class="answer-key" aria-hidden="true"><span class="answer-number">3</span><span class="ms answer-icon" data-answer-icon></span></span>
+                <span class="answer-label" data-answer-label>library</span><span class="sr-only" data-answer-status></span>
+              </button>
+              <button type="button" class="answer" data-cp-answer aria-disabled="false" aria-keyshortcuts="4">
+                <span class="answer-key" aria-hidden="true"><span class="answer-number">4</span><span class="ms answer-icon" data-answer-icon></span></span>
+                <span class="answer-label" data-answer-label>bus stop</span><span class="sr-only" data-answer-status></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="round-footer">
+        <div class="response">
+          <p class="feedback" data-cp-feedback role="status" aria-atomic="true">Pick a tile. Trust your memory.</p>
+          <div class="example" data-cp-example hidden>
+            <p lang="de" data-cp-example-de></p>
+            <p class="example-translation" data-cp-example-en></p>
+          </div>
+          <p class="anar-note" data-cp-note hidden><span class="who" aria-hidden="true">A</span><span><b>Anar:</b> <span data-cp-note-text></span></span></p>
+        </div>
+        <button type="button" class="next" data-cp-next hidden><span>Next card</span><span class="ms" aria-hidden="true">arrow_forward</span></button>
+      </div>
+      <p class="keyboard-hint" data-cp-hint>1–4 to choose</p>
+    </section>
+
+    <!-- 2 · Round results (Curiplay round summary) -->
+    <section class="results" data-cp-results hidden aria-labelledby="cp-results-title">
+      <div class="results-top">
+        <button type="button" class="home-btn" data-close><span class="ms" aria-hidden="true">arrow_back</span> anar.to</button>
+        <span>Round complete</span>
+      </div>
+      <div class="results-grid">
+        <section class="payoff">
+          <span class="award ms" aria-hidden="true">task_alt</span>
+          <h1 id="cp-results-title" tabindex="-1" data-cp-results-title>Your knowledge keeps working.</h1>
+          <div class="ticket"><strong data-cp-pct>100%</strong><span data-cp-correct>6 of 6 correct</span><small>Quiz · 6 · words from the app</small></div>
+          <div class="earned">
+            <button type="button" class="earned-cafe" data-cp-collect>
+              <span class="ms" aria-hidden="true">payments</span>
+              <span><strong data-cp-reward>+$35</strong> at your café</span>
+              <span class="collect">Collect <span class="ms" aria-hidden="true">arrow_forward</span></span>
+            </button>
+            <dl class="stats">
+              <div class="is-streak"><span class="ms" aria-hidden="true">local_fire_department</span><dd data-cp-best>6</dd><dt>correct in a row</dt></div>
+              <div><span class="ms" aria-hidden="true">schedule</span><dd data-cp-time>1 min</dd><dt>this round</dt></div>
+            </dl>
+          </div>
+          <div class="actions">
+            <button type="button" class="primary" data-cp-again><span>Play another round</span><small>Quiz · 6 questions · words from the app</small></button>
+            <button type="button" class="quiet" data-close>Back to anar.to</button>
+          </div>
+        </section>
+        <section class="words-card" aria-labelledby="cp-words-title">
+          <div class="words-head"><h2 id="cp-words-title">This round</h2><span data-cp-marked>6 words</span></div>
+          <ol class="word-list" data-cp-words></ol>
+        </section>
+      </div>
+    </section>
+
+    <!-- 3 · The café (Curiplay home: café up top, plum panel below) -->
+    <section class="cafe" data-cp-cafe hidden aria-labelledby="cp-cafe-title">
+      <div class="results-top">
+        <button type="button" class="home-btn" data-cp-back-results><span class="ms" aria-hidden="true">arrow_back</span> Results</button>
+        <span>Your café</span>
+      </div>
+      <div class="cafe-scene" data-cp-scene data-open="false" role="img" aria-label="Your Curiplay café, modelled in Blender">
+        <div class="cafe-img"></div>
+        <span class="cafe-sign" data-cp-sign lang="de">Geschlossen</span>
+        <span class="door-pill"><span class="ms" aria-hidden="true">payments</span><span data-cp-door>+$35 at the door</span></span>
+        <button type="button" class="open-cafe" data-cp-open>Open café <span class="ms" aria-hidden="true">arrow_forward</span></button>
+      </div>
+      <div class="cafe-panel">
+        <div>
+          <p class="greet" lang="de">Guten Abend.</p>
+          <p class="greet-sub" data-cp-cafe-sub>Your café is still closed today.</p>
+          <p class="kicker-cp">Curiplay · in development</p>
+          <h2 id="cp-cafe-title" tabindex="-1">That's Curiplay.</h2>
+          <p class="pitch">Short German rounds earn money for a café you build up, staff and decorate. 100,000 words from A1 to C1, and the café you just saw is modelled in Blender. I'm building it now, mostly after Feierabend.</p>
+          <button type="button" class="serve" data-cp-again>Play another round <span class="ms" aria-hidden="true">arrow_forward</span></button>
+        </div>
+        <div class="cafe-links">
+          <button type="button" class="cafe-link" data-goto="products"><span class="ic pink ms" aria-hidden="true">sports_esports</span>Play my other products<span class="ms go" aria-hidden="true">chevron_right</span></button>
+          <button type="button" class="cafe-link" data-close><span class="ic ms" aria-hidden="true">home</span>Back to anar.to<span class="ms go" aria-hidden="true">chevron_right</span></button>
+        </div>
+      </div>
+    </section>
+  </main>
+</dialog>

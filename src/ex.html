@@ -1,0 +1,156 @@
+<!-- Expadu: a mini version of expadu.com ("Your new city, joined up."), using the app's own screens -->
+<dialog id="ex" tabindex="-1" aria-label="Expadu, a mini version of expadu.com" style="--ex-street: url('{{EX_STREET}}')">
+
+  <section class="x-hero" data-zone="hero">
+    <svg class="x-art" aria-hidden="true" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+      <circle cx="1330" cy="110" r="150" fill="#ffb800"/><circle cx="1330" cy="110" r="96" fill="#ff7a00"/>
+      <path id="x-route" class="r" d="M-20 836 C 300 790, 520 880, 760 820 S 1180 700, 1460 300" stroke="#05badd" stroke-width="16" fill="none" stroke-linecap="round"/>
+      <path class="dots" d="M-20 836 C 300 790, 520 880, 760 820 S 1180 700, 1460 300" stroke="#fff" stroke-width="3" stroke-dasharray="2 14" fill="none" stroke-linecap="round"/>
+      <g class="here"><circle cx="760" cy="820" r="22" fill="#05badd" stroke="#0b1a2b" stroke-width="4"/><circle cx="760" cy="820" r="7" fill="#fff"/></g>
+      <text class="mark" x="792" y="866" font-size="26" fill="#0b1a2b" transform="rotate(-4 792 866)">you are here</text>
+      <g class="tram">
+        <g>
+          <rect x="-38" y="-15" width="76" height="30" rx="12" fill="#a01e5a" stroke="#0b1a2b" stroke-width="3"/>
+          <rect x="-28" y="-8" width="14" height="9" rx="2.5" fill="#ffe363"/><rect x="-9" y="-8" width="14" height="9" rx="2.5" fill="#ffe363"/><rect x="10" y="-8" width="14" height="9" rx="2.5" fill="#ffe363"/>
+          <animateMotion id="x-tram-go" dur="9s" begin="indefinite" fill="freeze" rotate="auto" keyPoints="0;0.62" keyTimes="0;1" calcMode="spline" keySplines=".45 0 .25 1"><mpath href="#x-route"/></animateMotion>
+        </g>
+      </g>
+    </svg>
+
+    <div class="wrap-x">
+      <nav class="x-nav" aria-label="Expadu">
+        <a class="x-logo" href="https://expadu.com" target="_blank" rel="noopener"><svg viewBox="13 22 74 60" aria-hidden="true"><g transform="translate(2.45 2.05)"><circle cx="20.5" cy="50" r="6" fill="#05badd"/><rect x="30" y="24" width="13" height="52" rx="6" fill="#0b1a2b"/><rect x="46" y="24" width="34" height="13" rx="6" fill="#ff3902" transform="rotate(-7 46 30)"/><rect x="46" y="43.5" width="25" height="13" rx="6" fill="#ff3902" transform="rotate(-4 46 50)"/><rect x="46" y="63" width="34" height="13" rx="6" fill="#ff3902" transform="rotate(-2 46 69)"/></g></svg>Expadu</a>
+        <span class="x-mini">A mini version of expadu.com</span>
+        <button class="x-close" type="button" data-close>Back to anar.to</button>
+      </nav>
+
+      <div class="x-hero-grid">
+        <div class="x-copy">
+          <span class="x-tag"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Wednesday, 13:10 · Cologne</span>
+          <h1 class="x-h1">Your new city, <span class="x-under">joined up.<svg aria-hidden="true" viewBox="0 0 300 30" preserveAspectRatio="none"><path d="M6 20 C 50 8, 90 26, 140 14 S 230 6, 294 16"/></svg></span></h1>
+          <p class="x-lead"><strong>Expadu is the daily companion for expats, starting with Cologne.</strong> It knows your day: when to leave for the appointment, what to bring and something good for afterwards. In plain English, with paperwork linked to its official sources.</p>
+          <div class="x-btns">
+            <a class="x-btn x-btn--ink" href="https://expadu.com" target="_blank" rel="noopener">Start free<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <button class="x-btn x-btn--outline" type="button" data-ex-step="0">Follow the day<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
+          </div>
+        </div>
+
+        <div class="x-stage">
+          <img class="x-poster-card" src="{{EX_POSTER_STREET}}" width="300" height="414" alt="Sample poster from Expadu Events: Street culture night, tonight 18:30 at Rheinauhafen">
+          <figure class="x-phone">
+            <div class="x-dev">
+              <div class="x-screen">
+                <img class="x-full" src="{{EX_TODAY}}" width="600" height="1299" alt="Expadu Today on a phone, sample day: D visa expires tomorrow; 14:00 Blue Card appointment in Mülheim; 1 of 5 documents ready; Leave now, tram 4 at 13:14 from Neumarkt, there 13:48, 12 minutes spare">
+                <button class="x-tap" type="button" data-ex-step="1" aria-label="Leave now: follow the trip"></button>
+              </div>
+            </div>
+          </figure>
+          <div class="x-note" aria-hidden="true">
+            <svg viewBox="0 0 54 30"><path d="M52 22 C 38 26, 20 22, 6 12"/><path d="M15 6 L 4 11 L 12 21"/></svg>
+            <span>12 min to spare!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="x-story" id="ex-day" data-zone="story" aria-label="A sample Wednesday in Cologne">
+    <div class="x-pin" data-step="0">
+      <div class="x-sheet s1" aria-hidden="true"></div>
+      <div class="x-sheet s2" aria-hidden="true"></div>
+      <div class="x-sheet s3" aria-hidden="true"></div>
+      <div class="x-glow" aria-hidden="true"></div>
+
+      <div class="wrap-x x-pin-grid">
+        <div class="x-left">
+          <div class="x-railwrap">
+            <div class="x-rail" role="group" aria-label="Times of the sample day">
+              <button type="button" data-ex-step="0" aria-current="step"><b>13:10</b>Today</button>
+              <button type="button" data-ex-step="1"><b>13:14</b>Travel</button>
+              <button type="button" data-ex-step="2"><b>14:00</b>Paperwork</button>
+              <button type="button" data-ex-step="3"><b>18:30</b>Events</button>
+            </div>
+            <div class="x-track" aria-hidden="true"><i></i></div>
+          </div>
+
+          <div class="x-caps">
+            <article class="x-cap on" data-c="0">
+              <span class="tag2">Today</span>
+              <strong class="tm">13:10</strong>
+              <h3>Your day, in order of what matters.</h3>
+              <p>The visa deadline from your own records comes first. Then the 14:00 appointment, what to bring, and the tram that gets you there with 12 minutes to spare.</p>
+            </article>
+            <article class="x-cap" data-c="1">
+              <span class="tag2">Travel</span>
+              <strong class="tm">13:14</strong>
+              <h3>On your way, step by step.</h3>
+              <p>Walk four minutes to Neumarkt, take tram 4 from the underground platform, get off at Wiener Platz at 13:42. It even shows where to stand, from OpenStreetMap’s platform data.</p>
+            </article>
+            <article class="x-cap" data-c="2">
+              <span class="tag2">Paperwork</span>
+              <strong class="tm">14:00</strong>
+              <h3>Walk in prepared.</h3>
+              <p>Your EU Blue Card checklist comes with the appointment: what’s ready and what’s still to get, in plain English, with the German where it matters.</p>
+            </article>
+            <article class="x-cap" data-c="3">
+              <span class="tag2">Events</span>
+              <strong class="tm">18:30</strong>
+              <h3>Then, the good part.</h3>
+              <p>Tonight’s programme, pasted on a Cologne wall. Keep scrolling and step outside.</p>
+            </article>
+          </div>
+
+          <button class="x-next" type="button" data-ex-next><span>Next: 13:14 Travel</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></button>
+        </div>
+
+        <div class="x-story-phone">
+          <div class="x-dev">
+            <div class="x-screen">
+              <div class="scr scr-today"><img class="x-full" src="{{EX_TODAY}}" width="600" height="1299" alt="Expadu Today, sample day: Leave now for the 14:00 Blue Card appointment"></div>
+              <div class="scr scr-trip">
+                <div class="body-wrap"><img src="{{EX_TRIP_BODY}}" width="600" height="1513" alt="Expadu Travel, sample trip: walk to Neumarkt, then tram 4 at 13:14 from Gleis 2 underground; your way to Wiener Platz and the appointment"></div>
+                <img class="head" src="{{EX_TRIP_HEAD}}" width="600" height="151" alt="">
+              </div>
+              <div class="scr scr-paper"><img class="x-full" src="{{EX_PAPER}}" width="600" height="1299" alt="Expadu Paperwork, sample records: EU Blue Card documents, 1 of 5 ready"></div>
+              <div class="scr scr-events"><img class="x-full" src="{{EX_EVENTS}}" width="600" height="1299" alt="Expadu Events, sample programme: tonight’s posters on a Cologne street"></div>
+              <span class="tram-fly" aria-hidden="true">4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="x-street" id="ex-street" data-zone="street">
+    <div class="x-street-bg" aria-hidden="true"></div>
+    <div class="x-rain" aria-hidden="true"></div>
+    <div class="x-posters">
+      <figure><img src="{{EX_POSTER_STREET}}" width="300" height="414" alt="Sample poster: Street culture night, tonight 18:30 until 21:00, Rheinauhafen, price not listed"><span class="tt" aria-hidden="true">18:00</span></figure>
+      <figure><img src="{{EX_POSTER_CINEMA}}" width="300" height="416" alt="Sample poster: Cinema under the stars, tonight 20:00 until 22:00, Stadtgarten, rain likely (sample forecast)"><span class="tt" aria-hidden="true">20:00</span></figure>
+    </div>
+    <div class="x-street-copy"><div class="wrap-x">
+      <h2>Good things to turn up for.</h2>
+      <p>A curated programme with the details in plain English. Plan to go, and the way there comes with it.</p>
+      <div class="x-weather"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 15a4 4 0 0 1 .5-8 5.5 5.5 0 0 1 10.4 1.6A3.3 3.3 0 0 1 17.5 15z"/><path d="M8 18l-1 2M12 18l-1 2M16 18l-1 2"/></svg><span><b>17° Showers</b> · 18:30 · Sample weather</span></div>
+      <p class="x-label">Sample programme · the street and posters from Expadu’s Events page</p>
+    </div></div>
+  </section>
+
+  <section class="x-join" data-zone="join">
+    <div class="wrap-x">
+      <span class="x-tag x-tag--join">Next morning</span>
+      <h2>Feel at home <span class="w">sooner.</span></h2>
+      <p>Tell Expadu your situation once. Your day, your paperwork and your evenings stay joined up from there.</p>
+      <div class="x-btns">
+        <a class="x-btn x-btn--ink x-btn--lift-y" href="https://expadu.com" target="_blank" rel="noopener">Start free in Cologne<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <button class="x-btn x-btn--outline" type="button" data-close>Back to anar.to</button>
+      </div>
+      <p class="x-fine">A mini version of expadu.com, made for anar.to. Times, events, places and checklists are sample content from Expadu’s preview; the street and posters are illustrations. Expadu isn’t legal advice.</p>
+    </div>
+  </section>
+
+  <div class="x-clock" aria-hidden="true" data-show="0">
+    <span class="dot"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></span>
+    <span><span class="t">13:10</span><span class="l">Today</span></span>
+  </div>
+</dialog>

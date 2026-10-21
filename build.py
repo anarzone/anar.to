@@ -1,0 +1,333 @@
+"""Build anar.to. Standard library only.
+
+    python3 build.py                     the site, in dist/ (index, 404, impressum, datenschutz, fingerprinted assets)
+    python3 build.py --release           the same, but stops while a launch blocker remains (e.g. no Impressum street)
+    python3 build.py --single FILE.html  one self-contained HTML file, for previews published as claude.ai artifacts
+"""
+import argparse, base64, datetime, hashlib, json, math, pathlib, re, shutil, subprocess, sys, urllib.parse
+
+ROOT = pathlib.Path(__file__).resolve().parent
+SRC = ROOT / 'src'
+ASSETS = ROOT / 'assets'
+DIST = ROOT / 'dist'
+SITE = json.loads((ROOT / 'site.json').read_text())
+SQLJS = 'sql.js-1.12.0'
+
+
+# ---------- CSS helpers (Curiplay's stylesheet is scoped to its dialog) ----------
+
+def split_top(css):
+    """Split CSS into top-level statements: ('rule', selector, body) or ('at', prelude, body)."""
+    out, i, n = [], 0, len(css)
+    while i < n:
+        j = css.find('{', i)
+        if j < 0:
+            break
+        prelude = css[i:j].strip()
+        depth, k = 1, j + 1
+        while k < n and depth:
+            if css[k] == '{':
+                depth += 1
+            elif css[k] == '}':
+                depth -= 1
+            k += 1
+        out.append(('at' if prelude.startswith('@') else 'rule', prelude, css[j + 1:k - 1]))
+        i = k
+    return out
+
+
+def split_selectors(sel):
+    parts, depth, cur = [], 0, ''
+    for ch in sel:
+        if ch in '([':
+            depth += 1
+        elif ch in ')]':
+            depth -= 1
+        if ch == ',' and depth == 0:
+            parts.append(cur)
+            cur = ''
+        else:
+            cur += ch
+    parts.append(cur)
+    return [p.strip() for p in parts if p.strip()]
+
+
+def scope(css, root):
+    css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)
+    out = []
+    for kind, prelude, body in split_top(css):
+        if kind == 'at':
+            if prelude.startswith('@media') or prelude.startswith('@supports'):
+                out.append(f"{prelude} {{\n{scope(body, root)}\n}}")
+            else:
+                out.append(f"{prelude} {{{body}}}")
+            continue
+        sels = []
+        for s in split_selectors(prelude):
+            if s.startswith(':root'):
+                sels.append(root + s[5:])
+            elif s == 'body' or s.startswith('body ') or s.startswith('body['):
+                sels.append(root + s[4:])
+            else:
+                sels.append(f"{root} {s}")
+        out.append(f"{', '.join(sels)} {{{body}}}")
+    return '\n'.join(out)
+
+
+def zine_fonts(text):
+    """Every font declaration that uses a type role also takes that role's variable-font settings."""
+    return re.sub(r'(font(?:-family)?:[^;{}]*var\(--f-(display|body|type)\)[^;{}]*)', r'\1; font-variation-settings: var(--fv-\2)', text)
+
+
+def blocks(text, name, keep):
+    """Keep or drop <!-- @name --> ... <!-- /@name --> blocks."""
+    return re.sub(rf'<!-- @{name} -->(.*?)<!-- /@{name} -->', (lambda m: m.group(1)) if keep else '', text, flags=re.S)
+
+
+def burst():
+    pts = []
+    for k in range(24):
+        a = k * math.pi / 12 - math.pi / 2
+        r = 50 if k % 2 == 0 else 41
+        pts.append(f"{50 + r * math.cos(a):.1f}% {50 + r * math.sin(a):.1f}%")
+    return ', '.join(pts)
+
+
+NOISE = ("<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'>"
+         "<filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/>"
+         "<feColorMatrix values='0 0 0 0 .1  0 0 0 0 .09  0 0 0 0 .11  0 0 0 .1 0'/></filter>"
+         "<rect width='100%' height='100%' filter='url(#n)'/></svg>")
+
+CP_FONTS = [  # Curiplay's own fonts, used inside its dialog
+    ('Fredoka One', 400, 'fredoka-one-latin-400-normal.woff2', '', 'swap'),
+    ('Curiplay Display TR', 400, 'curiplay-display-tr-400-normal.woff2', 'U+011E-011F, U+0130, U+015E-015F', 'swap'),
+    ('Nunito', 700, 'nunito-latin-700-normal.woff2', '', 'swap'),
+    ('Nunito', 800, 'nunito-latin-800-normal.woff2', '', 'swap'),
+    ('Nunito', 900, 'nunito-latin-900-normal.woff2', '', 'swap'),
+    ('Material Symbols Outlined', '100 700', 'material-symbols-outlined-subset.woff2', '', 'block'),
+]
+
+# What each {{PLACEHOLDER}} in the sources points at
+FILES = {
+    'CAFE': 'img/cafe.jpg', 'EXPADU': 'img/expadu-new.jpg', 'FG_ICON': 'img/fg.png',
+    'EX_TODAY': 'img/ex-scr-today-600.webp', 'EX_TRIP_HEAD': 'img/ex-trip-head-600.webp', 'EX_TRIP_BODY': 'img/ex-trip-body-600.webp',
+    'EX_PAPER': 'img/ex-scr-paper-600.webp', 'EX_EVENTS': 'img/ex-scr-events-600.webp', 'EX_POSTER_STREET': 'img/ex-poster-street-300.webp',
+    'EX_POSTER_CINEMA': 'img/ex-poster-cinema-300.webp', 'EX_STREET': 'img/ex-street-1400.webp',
+    'A_RIGHT': 'audio/right.mp3', 'A_WRONG': 'audio/wrong.mp3', 'A_COMPLETE': 'audio/complete.mp3', 'A_MONEY': 'audio/money.mp3',
+}
+MIME = {'.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.mp3': 'audio/mpeg', '.woff2': 'font/woff2'}
+
+
+def read(name):
+    return (SRC / name).read_text()
+
+
+def assemble(mode):
+    """The page's CSS, body HTML and JS, before placeholders are filled."""
+    cp_quiz = read('cp-quiz.css').replace(':focus { outline:none; }', '')
+    cp_css = scope(cp_quiz + '\n' + read('cp-extra.css'), '#cp')
+    cp_dialog = """
+#cp { width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; overflow: auto; }
+#cp::backdrop { background: rgba(58, 46, 57, 0.55); }
+#cp[open] { animation: cp-in 0.4s cubic-bezier(0.2, 1.2, 0.35, 1); }
+@keyframes cp-in { from { transform: translateY(40px); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { #cp[open] { animation: none; } }
+"""
+    fonts_cp = '\n'.join(
+        f'@font-face {{ font-family: "{fam}"; font-style: normal; font-weight: {w}; font-display: {disp}; '
+        f'src: url({{{{FONT:{f}}}}}) format("woff2");{f" unicode-range: {rng};" if rng else ""} }}'
+        for fam, w, f, rng, disp in CP_FONTS)
+    m_names = sorted(p.stem for p in SRC.glob('m-*.html'))
+    base_css = zine_fonts(read('base.css') + '\n' + read('machines.css'))
+    m_css = zine_fonts('\n'.join(read(f'{n}.css') for n in m_names if (SRC / f'{n}.css').exists()))
+    css = '\n'.join([read('fonts.css') if mode == 'site' else '', fonts_cp, base_css, m_css, cp_dialog, cp_css, read('fg.css'), read('ex.css')])
+    html = '\n'.join([read('body.html'), read('cp.html'), read('fg.html'), read('ex.html')] + [read(f'{n}.html') for n in m_names])
+    html = blocks(html, 'site', mode == 'site')
+    html = blocks(html, 'single', mode == 'single')
+    html = blocks(html, 'ride-log', SITE['ride_log'])
+    js = '\n'.join([read('zine-data.js'), read('route.js'), read('cp.js'), read('fg.js'), read('ex.js')]
+                   + [read(f'{n}.js') for n in m_names if (SRC / f'{n}.js').exists()] + [read('app.js')])
+    return css, html, js
+
+
+def legal(name, release):
+    imp = SITE['impressum']
+    street = imp['street'] or ('' if release else '[Straße und Hausnummer]')
+    text = read(f'legal/{name}.html')
+    for k, v in {'NAME': imp['name'], 'STREET': street, 'CITY': imp['city'], 'COUNTRY': imp['country'], 'EMAIL': imp['email'], 'UPDATED': SITE['updated']}.items():
+        text = text.replace('{{' + k + '}}', v)
+    return text
+
+
+def fill(text, subs):
+    for k, v in subs.items():
+        text = text.replace('{{' + k + '}}', v)
+    left = sorted(set(re.findall(r'\{\{[A-Z_]+(?::[^}]*)?\}\}', text)))
+    if left:
+        sys.exit(f'unreplaced placeholders: {left}')
+    return text
+
+
+def node_check(path):
+    if shutil.which('node'):
+        r = subprocess.run(['node', '--check', str(path)], capture_output=True, text=True)
+        if r.returncode:
+            sys.exit(f'JavaScript syntax error:\n{r.stderr}')
+
+
+# ---------- the single-file preview ----------
+
+def build_single(out):
+    css, html, js = assemble('single')
+    data_uri = lambda rel: f"data:{MIME[pathlib.Path(rel).suffix]};base64," + base64.b64encode((ASSETS / rel).read_bytes()).decode()
+    subs = {k: data_uri(v) for k, v in FILES.items()}
+    subs.update({'NOISE': 'data:image/svg+xml,' + urllib.parse.quote(NOISE), 'BURST': burst(), 'GH_CAL': (ASSETS / 'data' / 'gh.json').read_text().strip(),
+                 'SQLJS_BASE': f'https://cdnjs.cloudflare.com/ajax/libs/sql.js/{SQLJS.split("-")[1]}/',
+                 'LEGAL_DIALOG': legal('impressum', False).replace('<h1>', '<h2 id="legal-h" data-legal-anchor="impressum">').replace('</h1>', '</h2>')
+                 + legal('datenschutz', False).replace('<h1>', '<h2 data-legal-anchor="privacy">').replace('</h1>', '</h2>')})
+    css = re.sub(r'\{\{FONT:([^}]+)\}\}', lambda m: data_uri(f'fonts/{m.group(1)}'), css)
+    google = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+              '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700..900'
+              '&family=Recursive:slnt,wght,CASL,CRSV,MONO@-15..0,300..1000,0..1,0..1,0..1&family=Bricolage+Grotesque:opsz,wght@12..96,600..800'
+              '&family=Geist:wght@400..700&family=Permanent+Marker&display=swap">')
+    page = f'<title>anar.to preview</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n{google}\n<style>\n{css}\n</style>\n{html}\n<script>\n{js}\n</script>\n'
+    page = fill(page, subs)
+    out = pathlib.Path(out)
+    out.write_text(page)
+    check = out.with_suffix('.check.js')
+    check.write_text(fill(js, subs))
+    node_check(check)
+    check.unlink()
+    print(f'built {out.name}: {len(page.encode()) / 1024:.0f} KB')
+
+
+# ---------- the site ----------
+
+def fingerprint(rel, data=None):
+    """Copy an asset to dist/assets with a content hash in its name; return its URL."""
+    data = (ASSETS / rel).read_bytes() if data is None else data
+    p = pathlib.PurePosixPath(rel)
+    name = f"{p.stem}.{hashlib.sha256(data).hexdigest()[:10]}{p.suffix}"
+    dest = DIST / 'assets' / p.parent / name
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(data)
+    return f'/assets/{p.parent}/{name}' if str(p.parent) != '.' else f'/assets/{name}'
+
+
+def head(title, description, path, css_url, extra=''):
+    url = SITE['url'] + path
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content="{description}">
+<link rel="canonical" href="{url}">
+<meta name="theme-color" content="#ECEAE4">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="anar.to">
+<meta property="og:url" content="{url}">
+<meta property="og:title" content="{SITE['share_title'] if path == '/' else title}">
+<meta property="og:description" content="{description}">
+<meta property="og:image" content="{SITE['url']}/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Don't take my word for it. Anar Hagverdiyev, backend developer in Köln.">
+<meta name="twitter:card" content="summary_large_image">
+{extra}<link rel="stylesheet" href="{css_url}">
+"""
+
+
+def chrome(html):
+    """The masthead and footer from the front page, with links that work from any page."""
+    mast = re.search(r'<header class="masthead-z wrap">.*?</header>', html, re.S).group(0)
+    mast = mast.replace('href="#top"', 'href="/"').replace('href="#', 'href="/#')
+    foot = re.search(r'<footer class="foot wrap">.*?</footer>', html, re.S).group(0)
+    return mast, foot
+
+
+def build_site(release):
+    if release and not SITE['impressum']['street'].strip():
+        sys.exit('launch blocker: site.json impressum.street is empty (the Impressum needs a full postal address)')
+    if DIST.exists():
+        shutil.rmtree(DIST)
+    DIST.mkdir()
+    css, html, js = assemble('site')
+
+    subs = {k: fingerprint(v) for k, v in FILES.items()}
+    subs.update({'NOISE': fingerprint('img/noise.svg', NOISE.encode()), 'BURST': burst(),
+                 'GH_CAL': (ASSETS / 'data' / 'gh.json').read_text().strip(), 'SQLJS_BASE': f'/assets/vendor/{SQLJS}/'})
+    fonts = {}
+    def font(name):
+        fonts[name] = fonts.get(name) or fingerprint(f'fonts/{name}')
+        return fonts[name]
+    css = re.sub(r'\{\{FONT:([^}]+)\}\}', lambda m: font(m.group(1)), css)
+    css = re.sub(r'/assets/fonts/(google/[\w.-]+\.woff2)', lambda m: font(m.group(1)), css)
+    shutil.copytree(ASSETS / 'vendor' / SQLJS, DIST / 'assets' / 'vendor' / SQLJS)
+
+    css = fill(css, subs)
+    js = fill(js, subs)
+    css_url = fingerprint('site.css', css.encode())
+    js_url = fingerprint('site.js', js.encode())
+    node_check(DIST / js_url.lstrip('/'))
+
+    preload = ''.join(f'<link rel="preload" href="{font(f)}" as="font" type="font/woff2" crossorigin>\n'
+                      for f in ('google/recursive-latin-8.woff2', 'google/big-shoulders-display-latin-1.woff2'))
+    person = {'@context': 'https://schema.org', '@type': 'Person', 'name': SITE['impressum']['name'], 'url': SITE['url'],
+              'email': 'mailto:' + SITE['impressum']['email'], 'jobTitle': 'Backend developer',
+              'address': {'@type': 'PostalAddress', 'addressLocality': 'Köln', 'addressCountry': 'DE'},
+              'sameAs': ['https://github.com/anarzone', 'https://www.linkedin.com/in/haqverdiyev', 'https://www.instagram.com/anarzone/']}
+    extra = preload + f'<script src="{js_url}" defer></script>\n<script type="application/ld+json">{json.dumps(person, ensure_ascii=False)}</script>\n'
+    body = fill(html, subs)
+    (DIST / 'index.html').write_text(head(SITE['title'], SITE['description'], '/', css_url, extra) + '</head>\n<body>\n' + body + '\n</body>\n</html>\n')
+
+    mast, foot = chrome(body)
+    def page(file, title, description, path, main, lang='en'):
+        doc = (head(title, description, path, css_url, '<meta name="robots" content="noindex">\n' if file == '404.html' else '') + '</head>\n<body class="doc-page">\n<div class="page-z">\n  ' + mast + '\n'
+               + f'  <main class="doc wrap {main[0]}" lang="{lang}">\n{main[1]}\n  </main>\n  ' + foot + '\n</div>\n</body>\n</html>\n')
+        (DIST / file).write_text(fill(doc, {}))
+    page('impressum.html', 'Impressum · anar.to', 'Impressum für anar.to, die Website von Anar Hagverdiyev in Köln.', '/impressum', ('legal', legal('impressum', release)), 'de')
+    page('datenschutz.html', 'Privacy · anar.to', 'How anar.to handles data: no cookies, no analytics, no trackers.', '/datenschutz', ('legal', legal('datenschutz', release)))
+    page('404.html', 'Off route · anar.to', "This page isn't on anar.to.", '/404', ('lost', """    <p class="kicker">Error 404 · off route</p>
+    <h1>Wrong turn.</h1>
+    <p>This page isn't on the map. The route starts at the front page.</p>
+    <a class="arcade" href="/">Back to the start <span aria-hidden="true">▸</span></a>"""))
+
+    for f in sorted((ASSETS / 'meta').glob('*')) if (ASSETS / 'meta').exists() else []:
+        if f.is_file() and not f.name.startswith('.'):
+            shutil.copy2(f, DIST / f.name)
+    (DIST / 'robots.txt').write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE['url']}/sitemap.xml\n")
+    today = datetime.date.today().isoformat()
+    urls = ''.join(f"  <url><loc>{SITE['url']}{p}</loc><lastmod>{today}</lastmod></url>\n" for p in ('/', '/impressum', '/datenschutz'))
+    (DIST / 'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
+
+    # every local URL the pages, the stylesheet and the script mention must exist
+    missing = set()
+    for f in [*DIST.glob('*.html'), DIST / css_url.lstrip('/'), DIST / js_url.lstrip('/')]:
+        for url in re.findall(r'''(?:href|src)=["'](/[^"'#?]*)|url\((/[^)'"]+)\)|["'](/assets/[^"']+)["']''', f.read_text()):
+            u = next(x for x in url if x)
+            if u in ('/', '/impressum', '/datenschutz') or u.startswith(f'/assets/vendor/{SQLJS}/'):
+                continue
+            if not (DIST / u.lstrip('/')).exists():
+                missing.add(u)
+    if missing:
+        sys.exit(f'missing files: {sorted(missing)}')
+    size = sum(p.stat().st_size for p in DIST.rglob('*') if p.is_file())
+    print(f"built dist/: {len(list(DIST.rglob('*.html')))} pages, {size / 1024:.0f} KB in total "
+          f"(page {(DIST / 'index.html').stat().st_size / 1024:.0f} KB, css {(DIST / css_url.lstrip('/')).stat().st_size / 1024:.0f} KB, "
+          f"js {(DIST / js_url.lstrip('/')).stat().st_size / 1024:.0f} KB)")
+
+
+if __name__ == '__main__':
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument('--single', metavar='FILE', help='write one self-contained preview file instead of dist/')
+    ap.add_argument('--release', action='store_true', help='fail while launch blockers remain')
+    args = ap.parse_args()
+    if args.single:
+        build_single(args.single)
+    else:
+        build_site(args.release)

@@ -1,0 +1,10 @@
+# build output
+dist/
+*.check.js
+preview*.html
+
+# local
+.DS_Store
+__pycache__/
+node_modules/
+research/

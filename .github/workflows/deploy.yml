@@ -1,0 +1,65 @@
+name: Build and deploy
+
+# Every push to main builds the site and, once the deploy secrets exist, puts it live.
+# Pull requests only build. Secrets: DEPLOY_HOST, DEPLOY_SSH_KEY, DEPLOY_KNOWN_HOSTS (see README).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  site:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Decide whether this run deploys
+        id: gate
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ] && [ "$GITHUB_REF" = "refs/heads/main" ] && [ -n "$HOST" ]; then
+            echo "deploy=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deploy=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Building only. Deploys start once the DEPLOY_* secrets are set and the push is to main."
+          fi
+
+      - name: Refresh the GitHub calendar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/update-github.py
+
+      - name: Build
+        run: python3 build.py ${{ steps.gate.outputs.deploy == 'true' && '--release' || '' }}
+
+      - name: Deploy
+        if: steps.gate.outputs.deploy == 'true'
+        env:
+          HOST: ${{ secrets.DEPLOY_HOST }}
+          KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/deploy && chmod 600 ~/.ssh/deploy
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          tar -C dist -czf - . | ssh -i ~/.ssh/deploy -o IdentitiesOnly=yes -o BatchMode=yes "deploy@$HOST" "deploy ${GITHUB_SHA::7}"
+
+      - name: Check that anar.to serves this build
+        if: steps.gate.outputs.deploy == 'true'
+        run: |
+          css=$(grep -o '/assets/site\.[0-9a-f]*\.css' dist/index.html)
+          for i in 1 2 3 4 5 6; do
+            if curl -fsS https://anar.to/ | grep -q "$css"; then echo "live: $css"; exit 0; fi
+            sleep 5
+          done
+          echo "::error::anar.to doesn't serve the new build yet"
+          exit 1

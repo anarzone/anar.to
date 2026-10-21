@@ -1,0 +1,173 @@
+
+        :root {
+            --page:#FFF9F2; --card:#FFFEFB; --wash:#F6EDDF; --latte:#F1E5D0; --latte-deep:#E7D9BE;
+            --ink:#3A2E39; --ink-2:#7E6F78;
+            --green:#19E680; --green-action:#11C069; --green-deep:#088145; --green-tint:#E7FBF1;
+            --amber:#FFB41F; --amber-deep:#C57A00; --amber-tint:#FDF0CE;
+            --red:#F03866; --red-deep:#D30B3D; --red-tint:#FBE7EC; --rose-soft:#F49AB0;
+            --sky:#1BA8EE; --sky-deep:#0874A9; --sky-tint:#E7F4FB; --sky-game:#9EDBFA;
+            --sand:#FF8B38; --sand-deep:#B74D00; --sand-lit:#D96509;
+            --plum:#7A31B9; --plum-deep:#531F7A; --plum-tint:#F2E7FB;
+        }
+        * { box-sizing:border-box; }
+        [hidden] { display:none !important; }
+        body { margin:0; background:var(--page); color:var(--ink); font:800 15px/1.5 Nunito,system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+        h1,h2,h3,p { margin:0; }
+        button,a { -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+        button { color:inherit; cursor:pointer; font:inherit; }
+        a { color:inherit; }
+        :focus { outline:none; }
+        .ms { font-family:"Material Symbols Outlined"; font-variation-settings:'FILL' 1,'wght' 700; font-weight:normal; font-style:normal; text-transform:none; letter-spacing:normal; line-height:1; }
+        .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; border:0; }
+        .page { width:min(100%,980px); margin:auto; padding:30px 38px 24px; }
+        .masthead { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:34px; }
+        .brand { display:flex; align-items:center; gap:8px; font:400 23px "Fredoka One","Curiplay Display TR",sans-serif; }
+        .brand .ms { color:var(--plum); font-size:30px; }
+        .edition { font-size:12px; color:var(--ink-2); }
+        .board { position:relative; }
+        .arena-bar { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+        .exit { display:grid; place-items:center; flex:0 0 44px; height:44px; border:2px solid var(--plum-tint); border-radius:16px; background:var(--card); color:var(--plum-deep); text-decoration:none; }
+        .exit .ms { font-size:25px; }
+        .round-progress { display:flex; align-items:center; gap:18px; }
+        .round-label { font-size:13px; }
+        .pips { display:flex; gap:8px; list-style:none; margin:0; padding:0 0 3px; }
+        .pip { display:grid; place-items:center; width:36px; height:16px; border-radius:8px 8px 5px 8px; background:var(--latte); }
+        .pip[aria-current="step"] { background:var(--plum); box-shadow:0 3px 0 var(--plum-deep); }
+        .pip[data-result="correct"] { background:var(--green); box-shadow:0 3px 0 var(--green-deep); }
+        .pip[data-result="incorrect"] { background:var(--rose-soft); box-shadow:0 3px 0 var(--red-deep); }
+        .pip .ms { font-size:14px; color:var(--ink); }
+        .streak { display:flex; align-items:center; justify-content:center; gap:5px; min-width:70px; height:43px; padding:5px 12px; border-radius:20px 20px 9px 20px; background:var(--amber-tint); font:400 22px "Fredoka One","Curiplay Display TR",sans-serif; }
+        .streak .ms { font-size:26px; color:var(--amber-deep); }
+        .streak[data-lit="true"] { background:var(--amber); box-shadow:0 4px 0 var(--amber-deep); }
+        .question-title { width:fit-content; margin:32px auto 38px; text-align:center; font:400 clamp(29px,4.8vw,42px)/1.2 "Fredoka One","Curiplay Display TR",sans-serif; }
+        .playfield { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:center; gap:52px; padding:4px 14px 18px; }
+        .deck-stage { position:relative; display:grid; place-items:center; min-width:0; padding:10px 20px 19px 8px; }
+        .word-object { position:relative; isolation:isolate; width:100%; max-width:326px; transform:rotate(-4deg); }
+        .card-back { position:absolute; inset:6px 0 4px; z-index:-1; border-radius:34px 34px 16px 34px; }
+        .card-back--rose { background:var(--rose-soft); box-shadow:0 8px 0 var(--red-deep); transform:translate(15px,3px) rotate(11deg); }
+        .card-back--amber { background:var(--amber); box-shadow:0 8px 0 var(--amber-deep); transform:translate(8px,6px) rotate(6deg); }
+        .word-face { position:relative; display:flex; flex-direction:column; min-height:338px; padding:24px 27px 23px; border-radius:34px 34px 16px 34px; background:var(--plum); color:var(--card); box-shadow:0 11px 0 var(--plum-deep); }
+        .card-meta { display:flex; align-items:center; justify-content:space-between; gap:14px; font-size:14px; color:var(--plum-tint); }
+        .language { display:flex; align-items:center; gap:7px; }
+        .language .ms { font-size:19px; }
+        .level { position:absolute; top:-14px; right:-14px; display:grid; place-items:center; width:62px; height:62px; border-radius:22px 22px 10px 22px; transform:rotate(11deg); background:var(--sky-game); box-shadow:0 5px 0 var(--sky-deep); color:var(--plum-deep); font:400 23px "Fredoka One","Curiplay Display TR",sans-serif; }
+        .word { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px; min-width:0; padding:23px 0 24px; }
+        .word [data-article] { display:block; padding:3px 15px 5px; border-radius:13px 13px 6px 13px; transform:rotate(4deg); font:400 26px/1.1 "Fredoka One","Curiplay Display TR",sans-serif; background:var(--red-tint); color:var(--red-deep); }
+        .word [data-gender="der"] { background:var(--sky-tint); color:var(--sky-deep); }
+        .word [data-gender="das"] { background:var(--green-tint); color:var(--green-deep); }
+        .word [data-word] { max-width:100%; font:400 clamp(50px,7.8vw,74px)/1.1 "Fredoka One","Curiplay Display TR",sans-serif; letter-spacing:-1.5px; overflow-wrap:anywhere; }
+        .card-foot { display:flex; align-items:center; justify-content:space-between; color:var(--plum-tint); font-size:12px; }
+        .card-foot .ms { font-size:27px; }
+        .spark { position:absolute; z-index:1; width:25px; height:32px; background:var(--amber); clip-path:polygon(50% 0,63% 35%,100% 50%,63% 64%,50% 100%,37% 64%,0 50%,37% 35%); }
+        .spark--one { left:-23px; top:40px; transform:rotate(-12deg); }
+        .spark--two { right:-27px; bottom:1px; width:17px; height:24px; transform:rotate(13deg); background:var(--plum); }
+        .answer-station { min-width:0; }
+        .choose-label { margin:0 0 16px 4px; color:var(--plum-deep); font-size:14px; }
+        .answers { display:grid; gap:15px; padding-bottom:6px; }
+        .answer { --face:var(--card); --side:var(--plum-deep); --depth:6px; display:flex; align-items:center; gap:15px; width:calc(100% - 10px); min-height:65px; min-width:0; padding:11px 15px; border:2px solid var(--side); border-radius:21px 21px 10px 21px; background:var(--face); box-shadow:0 var(--depth) 0 var(--side); text-align:left; transition:transform 150ms ease-out,box-shadow 150ms ease-out,background-color 150ms ease-out; }
+        .answer:nth-child(even) { margin-left:10px; }
+        .answer-label { font:400 25px/1.15 "Fredoka One","Curiplay Display TR",sans-serif; overflow-wrap:anywhere; }
+        .answer-key { position:relative; display:grid; place-items:center; flex:0 0 35px; height:35px; background:var(--plum-tint); color:var(--plum-deep); border-radius:11px 11px 5px 11px; font:400 18px "Fredoka One","Curiplay Display TR",sans-serif; }
+        .answer-icon { position:absolute; inset:0; display:grid; place-items:center; font-size:23px; }
+        .answer-icon:empty { display:none; }
+        .answer[data-result="correct"] { --face:var(--green); --side:var(--green-deep); }
+        .answer[data-result="incorrect"] { --face:var(--rose-soft); --side:var(--red-deep); }
+        .answer[data-result="correct"] .answer-number,.answer[data-result="incorrect"] .answer-number { visibility:hidden; }
+        .answer[data-result="correct"] .answer-key { background:var(--green-deep); color:var(--card); border-radius:50%; }
+        .answer[data-result="incorrect"] .answer-key { background:var(--red-deep); color:var(--card); border-radius:50%; }
+        .answer[aria-disabled="true"] { cursor:default; }
+        [data-phase="answered"] .answer[data-result=""] { --side:var(--latte-deep); --face:var(--wash); color:var(--ink-2); }
+        [data-phase="answered"] .answer[data-result=""] .answer-key { background:var(--page); color:var(--ink-2); }
+        .round-footer { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:20px; margin-top:25px; padding:20px 8px 0; border-top:2px solid var(--latte); }
+        .response { display:flex; flex-direction:column; justify-content:center; min-height:94px; }
+        .feedback { font-size:15px; line-height:1.45; }
+        .example { font-size:13px; margin-top:5px; }
+        .example-translation { color:var(--ink-2); }
+        .next { --depth:6px; display:flex; align-items:center; justify-content:center; gap:13px; min-height:51px; min-width:166px; padding:12px 19px; border:0; border-radius:19px 19px 9px 19px; background:var(--green-action); color:var(--ink); box-shadow:0 var(--depth) 0 var(--green-deep); font:400 18px "Fredoka One","Curiplay Display TR",sans-serif; transition:transform 150ms ease-out,box-shadow 150ms ease-out; }
+        .next .ms { font-size:23px; }
+        .next:disabled { color:var(--plum-deep); background:var(--plum-tint); box-shadow:0 5px 0 var(--latte-deep); cursor:not-allowed; }
+        .keyboard-hint { margin-top:14px; text-align:center; color:var(--ink-2); font-size:11px; }
+        .complete { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:458px; gap:16px; text-align:center; }
+        .complete-mark { display:grid; place-items:center; width:95px; height:95px; margin-bottom:8px; border-radius:30px 30px 12px 30px; background:var(--amber); box-shadow:0 9px 0 var(--amber-deep); transform:rotate(-8deg); color:var(--plum-deep); font-size:50px; }
+        .complete h2 { font:400 34px/1.2 "Fredoka One","Curiplay Display TR",sans-serif; }
+        .score { color:var(--plum); font:400 62px "Fredoka One","Curiplay Display TR",sans-serif; }
+        .complete p { max-width:34ch; }
+        [data-phase="complete"] .round-footer { display:flex; justify-content:center; border:0; margin-top:0; padding-top:0; }
+        [data-phase="complete"] .response { display:none; }
+        .preview-note { text-align:center; color:var(--ink-2); font-size:11px; margin-top:30px; }
+        @media (hover:hover) {
+            .answer[aria-disabled="false"]:hover { --face:var(--amber); --depth:9px; transform:translateY(-3px); }
+            .answer[aria-disabled="false"]:hover .answer-key { background:var(--amber-tint); }
+            .next:not(:disabled):hover { --depth:8px; transform:translateY(-2px); }
+            .exit:hover { background:var(--plum-tint); }
+        }
+        .answer[aria-disabled="false"]:active { --depth:2px; transform:translateY(4px); }
+        .next:not(:disabled):active { --depth:1px; transform:translateY(5px); }
+        [data-verdict="correct"] .word-object { animation:happy-card 250ms ease-out; }
+        @keyframes happy-card { 0%,100% { transform:rotate(-4deg); } 45% { transform:translateY(-7px) rotate(-1deg); } }
+        @media (max-width:800px) {
+            .page { padding-inline:26px; }
+            .playfield { gap:30px; padding-inline:6px; }
+            .word-face { min-height:317px; padding-inline:20px; }
+            .answer-label { font-size:23px; }
+            .answer { gap:12px; }
+            .level { width:54px; height:54px; font-size:21px; }
+            .round-progress { gap:12px; }
+        }
+        @media (max-width:659px) {
+            .page { padding:18px 22px 24px; }
+            .masthead { margin-bottom:16px; }
+            .brand { font-size:21px; }
+            .edition { font-size:11px; }
+            .arena-bar { gap:10px; }
+            .round-progress { flex-direction:column-reverse; gap:7px; }
+            .round-label { font-size:11px; }
+            .pip { width:29px; height:12px; }
+            .streak { min-width:62px; }
+            .question-title { margin:18px auto 20px; font-size:30px; }
+            .playfield { grid-template-columns:minmax(0,1fr); gap:17px; padding:0; }
+            .deck-stage { width:min(100% - 22px,330px); margin:auto; padding:7px 16px 15px 7px; }
+            .word-object { max-width:none; transform:rotate(-3deg); }
+            .word-face { min-height:160px; padding:18px 22px 15px; border-radius:27px 27px 13px 27px; }
+            .card-back { border-radius:27px 27px 13px 27px; }
+            .card-back--rose { transform:translate(10px,1px) rotate(9deg); }
+            .card-back--amber { transform:translate(5px,4px) rotate(5deg); }
+            .card-meta { font-size:12px; }
+            .language .ms { font-size:16px; }
+            .level { top:-9px; right:-10px; width:48px; height:48px; border-radius:17px 17px 8px 17px; font-size:20px; }
+            .word { flex-direction:row; align-items:baseline; gap:11px; padding:14px 0; }
+            .word [data-article] { flex-shrink:0; padding:3px 9px 5px; font-size:21px; }
+            .word [data-word] { font-size:clamp(39px,11.2vw,59px); letter-spacing:-1px; }
+            .card-foot { font-size:11px; }
+            .card-foot .ms { font-size:21px; }
+            .spark--one { left:-18px; top:26px; width:19px; height:25px; }
+            .spark--two { right:-12px; width:13px; height:19px; }
+            .choose-label { margin-bottom:10px; font-size:13px; }
+            .answers { gap:11px; }
+            .answer { min-height:53px; padding:6px 13px; gap:13px; border-radius:18px 18px 9px 18px; }
+            .answer-label { font-size:22px; }
+            .answer-key { height:33px; flex-basis:33px; font-size:17px; }
+            .round-footer { grid-template-columns:minmax(0,1fr); gap:6px; padding:12px 0 0; margin-top:18px; }
+            .response { min-height:78px; text-align:center; }
+            .feedback { font-size:14px; }
+            .example { font-size:12px; }
+            .next { width:100%; }
+            .keyboard-hint { margin-top:19px; }
+            .preview-note { margin-top:23px; font-size:10px; }
+            .complete { min-height:430px; }
+            .complete h2 { font-size:29px; }
+            @keyframes happy-card { 0%,100% { transform:rotate(-3deg); } 45% { transform:translateY(-5px) rotate(0deg); } }
+        }
+        @media (max-width:359px) {
+            .page { padding-inline:17px; }
+            .question-title { font-size:27px; }
+            .word-face { padding-inline:17px; }
+            .word { gap:8px; }
+            .word [data-word] { font-size:37px; }
+            .word [data-article] { font-size:19px; }
+            .edition { max-width:90px; text-align:right; }
+        }
+        @media (prefers-reduced-motion:reduce) {
+            *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+        }
+    

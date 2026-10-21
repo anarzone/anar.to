@@ -1,0 +1,87 @@
+<!-- Machine: DDD in three moves (Stage 2, talentsconnect, Cat 2 climb). An illustration on a made-up recruitment app. -->
+<dialog id="m-ddd" class="zd mach" aria-labelledby="md-h">
+  <div class="zd-bar"><p>Stage 2 · talentsconnect · Cat 2 climb</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <div class="zd-body mach-body">
+    <header class="mach-head">
+      <div>
+        <p class="kicker">Ride the climb</p>
+        <h2 class="mach-title" id="md-h" tabindex="-1">Untangle it.</h2>
+        <p class="mach-dek">At talentsconnect I brought Domain-Driven Design into a legacy PHP codebase, so the business rules could be tested on their own. Here is DDD in three moves, on a made-up recruitment app: put code in the right layer, pick the right building blocks, then split the business into parts that talk through events.</p>
+      </div>
+      <ol class="md-moves" role="tablist" aria-label="The three moves">
+        <li><button type="button" role="tab" data-level="0" aria-selected="true"><b>1</b><span>Layers</span><i aria-hidden="true"></i></button></li>
+        <li><button type="button" role="tab" data-level="1" aria-selected="false"><b>2</b><span>Building blocks</span><i aria-hidden="true"></i></button></li>
+        <li><button type="button" role="tab" data-level="2" aria-selected="false"><b>3</b><span>Contexts</span><i aria-hidden="true"></i></button></li>
+      </ol>
+    </header>
+
+    <!-- Move 1: layers and the dependency rule -->
+    <section class="md-level" data-level="0" aria-labelledby="md-l0-h">
+      <h3 class="md-level-h" id="md-l0-h">Move 1 · Every class in its layer</h3>
+      <p class="md-how" id="md-how0">Pick a class, then the layer it belongs in.</p>
+      <div class="md-grid">
+        <div class="panel"><div class="md-chips" id="md-chips0" role="group" aria-label="Classes to place"></div></div>
+        <div class="md-layers" id="md-layers"></div>
+      </div>
+      <div class="panel md-rule" id="md-rule" hidden>
+        <p id="md-rule-p">Every arrow points at the domain. It depends on nothing, so a test of a hiring rule needs no database, no HTTP and no framework.</p>
+        <button type="button" class="ride" id="md-break">Break the rule: put Doctrine inside <code>Application.php</code></button>
+      </div>
+    </section>
+
+    <!-- Move 2: entities, value objects and an aggregate -->
+    <section class="md-level" data-level="1" aria-labelledby="md-l1-h" hidden>
+      <h3 class="md-level-h" id="md-l1-h">Move 2 · Same thing, or not?</h3>
+      <div class="md-same" id="md-same"></div>
+      <div class="panel md-inv">
+        <h3>The aggregate guards the rule</h3>
+        <p class="md-lang-p">A client is invoiced once per hire. Hire the same candidate twice:</p>
+        <div class="md-inv-btns">
+          <button type="button" class="ride ghost" id="md-legacy-hire">Legacy: <code>hireCandidate()</code> twice</button>
+          <button type="button" class="ride" id="md-ddd-hire">Aggregate: <code>Application::hire()</code> twice</button>
+        </div>
+        <p class="md-inv-out" id="md-inv-out" role="status"></p>
+        <pre class="md-code"><code>final class Application
+{
+    public function hire(): void
+    {
+        if ($this->status === Status::Hired) {
+            throw new CandidateAlreadyHired($this->id);
+        }
+        $this->status = Status::Hired;
+        $this->record(new CandidateHired($this->id, $this->jobId));
+    }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- Move 3: bounded contexts and domain events -->
+    <section class="md-level" data-level="2" aria-labelledby="md-l2-h" hidden>
+      <h3 class="md-level-h" id="md-l2-h">Move 3 · Split the business, connect with events</h3>
+      <div class="md-grid">
+        <section class="panel md-legacy" aria-label="The old JobService">
+          <p class="md-legacy-h"><code>JobService.php</code> <small id="md-left">12 methods, 1 class</small> <span class="md-calls">Calls crossing a boundary: <b id="md-calls">17</b></span></p>
+          <svg class="md-tangle" id="md-tangle" viewBox="0 0 360 260" aria-hidden="true"></svg>
+          <p class="md-how" id="md-how">Pick a method, then the part of the business that owns it.</p>
+          <div class="md-chips" id="md-chips" role="group" aria-label="Methods still in the legacy class"></div>
+          <button type="button" class="linkish" id="md-solve">Sort it for me</button>
+        </section>
+        <div>
+          <div class="md-ctxs" id="md-ctxs"></div>
+          <div class="md-bus" id="md-bus" aria-live="polite"><span class="md-bus-l">Event bus</span></div>
+          <div class="panel md-lang" id="md-lang-box" hidden>
+            <p class="md-lang-p"><b>One word, three meanings.</b> "Candidate" meant something different in every corner of the old class. Now each part has its own model:</p>
+            <ul id="md-lang"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="mach-actions">
+      <button type="button" class="arcade" id="md-next" hidden>Next move ▸</button>
+      <button type="button" class="linkish" id="md-reset">Start over</button>
+    </div>
+    <p class="mach-status" id="md-status" role="status"></p>
+    <p class="mach-note">An illustration on a made-up recruitment app. No talentsconnect code or data is shown.</p>
+  </div>
+</dialog>

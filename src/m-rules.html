@@ -1,0 +1,53 @@
+<!-- Machine: Expadu's rules engine (Stage 4, Expadu, Cat 1 climb). Rules, figures and wording follow expadu-app origin/main. -->
+<dialog id="m-rules" class="zd mach" aria-labelledby="mx-h">
+  <div class="zd-bar"><p>Stage 4 · Expadu · Cat 1 climb</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <div class="zd-body mach-body">
+    <header class="mach-head">
+      <div>
+        <p class="kicker">Ride the climb</p>
+        <h2 class="mach-title" id="mx-h" tabindex="-1">Yes · No · ?</h2>
+        <p class="mach-dek">Expadu builds every newcomer's paperwork plan with a rules engine I wrote. It's deterministic: no language model, no guessing. Each rule is checked on its own against your facts and answers yes, no, or "I need to know more". A missing fact never becomes a guess. It becomes a question.</p>
+      </div>
+      <div class="tally">
+        <p class="tally-n"><span><b id="mx-yes">0</b> yes</span><span><b id="mx-no">0</b> no</span><span class="q"><b id="mx-unk">0</b> ?</span></p>
+        <p class="tally-l" id="mx-tally-l">rules checked, each on its own</p>
+        <div class="cases" role="group" aria-label="Try a case">
+          <span>Try a case</span>
+          <button type="button" class="ride ghost" data-case="eu">EU engineer</button>
+          <button type="button" class="ride ghost" data-case="bc">Blue Card, D visa</button>
+          <button type="button" class="ride ghost" data-case="stu">Student, visa-free</button>
+          <button type="button" class="ride ghost" data-case="fam">Joining a German spouse</button>
+          <button type="button" class="linkish" data-case="blank">Start blank</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="rules-grid">
+      <section class="panel facts" aria-labelledby="mx-facts-h">
+        <h3 id="mx-facts-h">Your facts</h3>
+        <div id="mx-facts"></div>
+      </section>
+      <section class="panel plan" aria-labelledby="mx-plan-h">
+        <h3 id="mx-plan-h">Your plan</h3>
+        <div id="mx-plan" aria-live="polite"></div>
+      </section>
+      <section class="panel rules" aria-labelledby="mx-rules-h">
+        <h3 id="mx-rules-h">The rules <small>pick one to read it</small></h3>
+        <ol id="mx-rules"></ol>
+        <pre class="yaml" id="mx-yaml"></pre>
+      </section>
+    </div>
+
+    <details class="panel code">
+      <summary>How it decides: the real loop, from Expadu's <code>Applicability.php</code></summary>
+      <pre><code>foreach ($appliesIf as $group) {
+    $verdict = self::evaluateGroup($group, $attributes);
+    if ($verdict === self::Yes) { return self::Yes; }
+    if ($verdict === self::Unknown) { $sawUnknown = true; }
+}
+return $sawUnknown ? self::Unknown : self::No;</code></pre>
+      <p>A rule is a list of condition groups. Inside a group every condition must hold; any one group is enough. A fact nobody has asked yet is <code>null</code>, which makes the group unknown instead of false. Unknown rules turn into the questions above. Rules never create facts, so the order you answer in never changes the result.</p>
+    </details>
+    <p class="mach-note">18 of Expadu's rules, simplified for this page. The figures and wording come from its rule files for Cologne (checked June 2026) and change over time. Not legal advice. In the app you only see the plan; this view opens the engine up.</p>
+  </div>
+</dialog>

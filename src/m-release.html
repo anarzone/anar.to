@@ -1,0 +1,40 @@
+<!-- Machine: 60 → 10, the release pipeline (Stage 3, plusForta, Cat 1 climb) -->
+<dialog id="m-release" class="zd mach" aria-labelledby="mr-h">
+  <div class="zd-bar"><p>Stage 3 · plusForta · Cat 1 climb</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <div class="zd-body mach-body">
+    <header class="mach-head">
+      <div>
+        <p class="kicker">Ride the climb</p>
+        <h2 class="mach-title" id="mr-h">60 → 10</h2>
+        <p class="mach-dek">Releases at plusForta took about an hour, by hand, and the code had no tests. I built the GitLab CI/CD pipeline that brought a release under ten minutes, and the tests that run on every push. Automate the steps and watch the clock.</p>
+      </div>
+      <div class="clock">
+        <span class="clock-l" id="mr-clock-l">Minutes per release</span>
+        <span class="clock-t" id="mr-clock" aria-live="polite">60:00</span>
+        <div class="clock-bar" aria-hidden="true"><i id="mr-bar"></i><b></b><em>10</em></div>
+        <p class="clock-safety" id="mr-safety">Checked by: someone clicking around</p>
+        <span class="summit-stamp" id="mr-stamp" hidden>Summit</span>
+      </div>
+    </header>
+
+    <div class="mach-grid">
+      <section class="hand" aria-labelledby="mr-hand-h">
+        <h3 id="mr-hand-h">By hand</h3>
+        <ol id="mr-hand"></ol>
+      </section>
+      <section class="pipe" aria-labelledby="mr-pipe-h">
+        <h3 id="mr-pipe-h">Pipeline <small>jobs in one stage run side by side</small></h3>
+        <div class="stages" id="mr-stages"></div>
+        <button type="button" class="ride add-tests" id="mr-tests">Add the tests that didn't exist ▸</button>
+      </section>
+    </div>
+
+    <div class="mach-actions">
+      <button type="button" class="arcade" id="mr-run">Run a release ▸</button>
+      <button type="button" class="arcade sheetb" id="mr-all">Automate everything</button>
+      <button type="button" class="linkish" id="mr-reset">Start over</button>
+    </div>
+    <p class="mach-status" id="mr-status" role="status"></p>
+    <p class="mach-note">The steps and their minutes are illustrative. The totals are from my CV: about 60 minutes before, under 10 after.</p>
+  </div>
+</dialog>

@@ -1,0 +1,272 @@
+<div class="page-z">
+  <header class="masthead-z wrap">
+    <a class="logo-z" href="#top" aria-label="anar.to, back to the cover">ANAR<span>.TO</span></a>
+    <p class="issue-z"><span>Nº 01</span><span>Herbst 2026</span><span>Köln</span><span>Gratis</span><span class="colorbar" aria-hidden="true"><i></i><i></i><i></i><i></i></span></p>
+    <nav class="nav-z" aria-label="Sections">
+      <a href="#products">Products</a><a href="#route">Route</a><a href="#playbox">Playbox</a><a href="#zine">Zine</a><a href="#life">Life</a><a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero wrap" id="top" aria-labelledby="headline">
+      <div>
+        <h1 class="headline" id="headline">
+          <span class="strip s1"><i class="tape" aria-hidden="true"></i>Don't take</span>
+          <span class="strip s2">my word</span>
+          <span class="strip s3">for it.<i class="tape" aria-hidden="true"></i></span>
+        </h1>
+        <p class="intro">I'm <strong>Anar</strong>, a backend developer in Köln who ships whole products alone, from the database to the last button. Every poster below is the real thing. <mark>Press the buttons.</mark></p>
+        <ul class="stickers" aria-label="My products, and a few facts">
+          <li class="sticker st-yellow" style="--r: -7deg; --d: 0.3s"><button type="button" class="face" data-open="ex" aria-label="Expadu, live in Köln: follow the day">Expadu<small>live in Köln</small></button></li>
+          <li class="sticker st-pink" style="--r: -4deg; --d: 0.38s"><button type="button" class="face" data-open="cp" aria-label="Curiplay, in development: play a round">Curiplay<small>in the oven</small></button></li>
+          <li class="sticker st-black" style="--r: 5deg; --d: 0.46s"><button type="button" class="face" data-open="fg" aria-label="FocusGuard, brew install: try it">FocusGuard<small>brew install</small></button></li>
+          <li class="sticker st-blue" style="--r: 4deg; --d: 0.54s"><span class="face">Baku → Köln<small>3,476 km</small></span></li>
+          <li class="sticker st-bib" style="--r: -3deg; --d: 0.62s"><a class="face" href="#tk-next" draggable="false"><span class="bib-band">Transfer window</span>Open<small>for my next team →</small></a></li>
+        </ul>
+        <p class="hint">Drag the stickers around, or tap a product to try it.</p>
+      </div>
+      <aside class="hero-side" aria-label="Start here">
+        <div class="stamp">
+          <svg class="stamp-ring" viewBox="0 0 210 210" aria-hidden="true">
+            <defs><path id="ring" d="M105,105 m-82,0 a82,82 0 1,1 164,0 a82,82 0 1,1 -164,0"></path></defs>
+            <text><textPath href="#ring" textLength="508" lengthAdjust="spacing">PRESS THE BUTTONS • PRESS THE BUTTONS • </textPath></text>
+          </svg>
+          <button class="press" type="button" id="press">Press</button>
+        </div>
+        <nav class="inside" aria-labelledby="inside-title">
+          <h2 id="inside-title">Inside this issue</h2>
+          <ol>
+            <li><button type="button" data-open="cp"><span class="label">Curiplay: play a round</span><span class="dots"></span><span class="go">play →</span></button></li>
+            <li><button type="button" data-open="ex"><span class="label">Expadu: follow the day</span><span class="dots"></span><span class="go">play →</span></button></li>
+            <li><button type="button" data-open="fg"><span class="label">FocusGuard: get blocked</span><span class="dots"></span><span class="go">play →</span></button></li>
+            <li><a href="#route"><span class="label">The Route: ride the climbs</span><span class="dots"></span><span class="go">→</span></a></li>
+            <li><button type="button" data-open="m-sql"><span class="label">SQL time trial: race the query</span><span class="dots"></span><span class="go">play →</span></button></li>
+            <li><a href="#zine"><span class="label">The zine: first issue soon</span><span class="dots"></span><span class="go">→</span></a></li>
+            <li><a href="#life"><span class="label">Life: rides and more</span><span class="dots"></span><span class="go">→</span></a></li>
+            <li><a href="#contact"><span class="label">Say hallo: tear a strip</span><span class="dots"></span><span class="go">→</span></a></li>
+          </ol>
+        </nav>
+      </aside>
+    </section>
+
+    <section class="products wrap" id="products" aria-labelledby="products-title">
+      <div class="sec-head">
+        <h2 class="sec-title" id="products-title">Now playing</h2>
+        <p class="sec-sub">Three products I build on my own. Each button opens a working piece of the real thing, in its own design.</p>
+      </div>
+      <div class="wall">
+        <article class="poster p-cp" style="--k: 0s" aria-labelledby="cp-name">
+          <i class="tape" aria-hidden="true"></i>
+          <p class="kicker">Learn German · in development</p>
+          <div class="photo photo-cafe" role="img" aria-label="Curiplay's café, modelled in Blender, printed in pink"></div>
+          <h3 class="poster-title" id="cp-name">Curiplay</h3>
+          <p class="tagline">Learn German. Grow a café.</p>
+          <p class="small">A real round from Curiplay's quiz, with words, levels and example sentences from its word bank. About a minute.</p>
+          <button class="arcade" type="button" data-open="cp">Play a round <span aria-hidden="true">▸</span></button>
+          <button class="ride ghost poster-more" type="button" data-open="m-cp">The design behind it ▸</button>
+          <span class="ink-stamp" aria-hidden="true">In development</span>
+        </article>
+
+        <article class="poster p-ex" style="--k: 0.08s" aria-labelledby="ex-name">
+          <i class="tape" aria-hidden="true"></i>
+          <p class="kicker">Daily companion for expats · live in Köln · free</p>
+          <div class="photo photo-ex" role="img" aria-label="The Expadu landing page, printed in yellow"></div>
+          <h3 class="poster-title" id="ex-name">Expadu</h3>
+          <p class="tagline">Your new city, joined up.</p>
+          <p class="small">It knows your day: when to leave for the appointment, what to bring and something good for afterwards.</p>
+          <button class="arcade pinkb" type="button" data-open="ex">Follow the day <span aria-hidden="true">▸</span></button>
+          <button class="ride ghost poster-more" type="button" data-open="m-rules">The rules engine ▸</button>
+        </article>
+
+        <article class="poster p-fg" style="--k: 0.16s" aria-labelledby="fg-name">
+          <i class="tape" aria-hidden="true"></i>
+          <p class="kicker">macOS 14+ · free</p>
+          <div class="fg-row">
+            <svg class="shield" viewBox="0 0 120 140" aria-hidden="true">
+              <path d="M60 6 L108 22 V68 C108 100 86 124 60 134 C34 124 12 100 12 68 V22 Z" fill="#FFE800" stroke="#18171C" stroke-width="6" stroke-linejoin="round"></path>
+              <path d="M60 32 V104" stroke="#18171C" stroke-width="8" stroke-linecap="round" stroke-dasharray="1 16"></path>
+            </svg>
+            <h3 class="poster-title" id="fg-name">Focus<wbr>Guard</h3>
+          </div>
+          <p class="tagline">A bouncer for your attention.</p>
+          <ul class="ladder" aria-label="How it escalates"><li>log</li><li class="arr" aria-hidden="true">→</li><li>nudge</li><li class="arr" aria-hidden="true">→</li><li>block</li></ul>
+          <div class="cmd"><code id="brew">brew install --cask anarzone/tap/focusguard</code><button type="button" data-copy="brew">Copy</button></div>
+          <button class="arcade" type="button" data-open="fg">Try to slack off <span aria-hidden="true">▸</span></button>
+        </article>
+      </div>
+    </section>
+
+    <section class="route wrap" id="route" aria-labelledby="route-title">
+      <div class="sec-head">
+        <h2 class="sec-title" id="route-title">The Route</h2>
+        <p class="sec-sub">My CV as a stage race, newest first. The climbs marked ▸ are playable: ride one and solve the problem the way I did.</p>
+      </div>
+      <div class="route-sheet">
+        <dl class="start-sheet" id="start-sheet"></dl>
+        <div class="profile-wrap"><svg id="route-svg" viewBox="0 0 1000 360" role="img" aria-label="Career drawn as a cycling stage profile, newest on the left: an open fifth stage for my next team, the summit finish at Expadu in Köln today, then four stages back to a prologue at Khazar University in Baku."></svg></div>
+        <p class="legend-r"><span><i class="k-hc">HC</i>hardest climb</span><span><i class="k-c">1</i>climb, category 1 to 4</span><span><i class="k-play">1 ▸</i>playable climb</span><span><i class="k-sp"></i>side project</span><span><i class="k-here"></i>today</span><span>Height shows scope and difficulty, not metres. Stage 4 is drawn wider.</span></p>
+      </div>
+      <div class="sprints" id="sprints"></div>
+      <div class="tickets" id="tickets"></div>
+      <div class="jerseys-z" id="jerseys"></div>
+      <div class="route-actions">
+        <button class="arcade" type="button" data-open="cvd">Plain CV ▸</button>
+        <button class="arcade sheetb" type="button" id="copy-json">Copy cv.json</button>
+        <span class="small" style="margin:0">The plain version reads like a normal CV, for recruiters and applicant systems.</span>
+      </div>
+    </section>
+
+    <section class="playbox wrap" id="playbox" aria-labelledby="playbox-title">
+      <div class="sec-head">
+        <h2 class="sec-title" id="playbox-title">The playbox</h2>
+        <p class="sec-sub">Backend problems you can solve yourself, right here. First up: SQL, against a real database running in your browser.</p>
+      </div>
+      <article class="pb-card">
+        <i class="tape" aria-hidden="true"></i>
+        <div class="pb-copy">
+          <p class="kicker">SQL time trial · 3 stages + free ride</p>
+          <h3 class="pb-title">Race the query.</h3>
+          <p>A job board with 92,400 rows, generated in your browser. Kill an N+1, climb with an index, write the report in one query. Win a stage, win a jersey. The clock is real.</p>
+          <button class="arcade" type="button" data-open="m-sql">Start the time trial <span aria-hidden="true">▸</span></button>
+        </div>
+        <div class="pb-race" aria-hidden="true">
+          <pre class="pb-before"><span>-- the old way: 21 queries</span><s>foreach ($jobs as $job) {
+    $job->getCompany()->getName();
+}</s></pre>
+          <pre class="pb-after"><span>-- one query</span>SELECT j.title, c.name
+FROM jobs j
+JOIN companies c ON c.id = j.company_id
+WHERE j.city = 'Köln'
+LIMIT 20;</pre>
+          <p class="pb-flag">Finish ▸</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="zine wrap" id="zine" aria-labelledby="zine-title">
+      <div class="sec-head">
+        <h2 class="sec-title" id="zine-title">The zine</h2>
+        <p class="sec-sub">Essays and build logs from building three products alone.</p>
+      </div>
+      <div class="zine-empty">
+        <div class="press-sheet">
+          <div class="blank" aria-hidden="true"><span>Issue 01</span></div>
+          <div class="blank" aria-hidden="true"><span>Issue 02</span></div>
+          <div class="blank" aria-hidden="true"><span>Issue 03</span></div>
+          <p class="press-stamp">At the printer</p>
+        </div>
+        <p class="press-note"><b>Nothing to read yet.</b> The first issue is being written, and it lands here first.</p>
+      </div>
+    </section>
+
+    <section class="life wrap" id="life" aria-labelledby="life-title">
+      <div class="sec-head">
+        <h2 class="sec-title" id="life-title">Off the clock</h2>
+        <p class="sec-sub">Rides, the things I make for fun, and where else I post. Everything is published here first.</p>
+      </div>
+      <div class="life-grid">
+        <!-- @ride-log -->
+        <article class="ride-poster" aria-labelledby="ride-title">
+          <span class="example-stamp" aria-hidden="true">Example rides</span>
+          <p class="kicker">Ride log</p>
+          <h3 id="ride-title">When the code ships, I ride.</h3>
+          <div class="ride-chart" id="ride-chart"></div>
+          <dl class="ride-stats" id="ride-stats"></dl>
+          <ul class="ride-list" id="ride-list"></ul>
+          <p class="ride-note">These three rides are placeholders that show the layout. My real rides go here, built from ride files when the site is published.</p>
+        </article>
+        <!-- /@ride-log -->
+        <div class="also">
+          <button type="button" class="also-card" style="--rot: 0.8deg" data-open="cp"><span class="pic" aria-hidden="true"><i></i></span><span><span class="ac-t">3D and Blender</span><span class="ac-p">I build Curiplay's café myself, from Python scripts in Blender. Finish a round of Curiplay and it opens.</span></span></button>
+          <div class="also-card" style="--rot: -0.6deg"><span class="pic lang" aria-hidden="true">AZ TR<br>EN DE</span><span><span class="ac-t">Four languages</span><span class="ac-p">Azerbaijani, Turkish, English and German. Curiplay exists because the last one took work.</span></span></div>
+          <a class="also-card" style="--rot: 0.4deg" href="#zine"><span class="pic build" aria-hidden="true">✶</span><span><span class="ac-t">Building in public</span><span class="ac-p">Three products at once means plenty of lessons. They go in the zine.</span></span></a>
+          <div class="elsewhere">
+            <h4>Elsewhere</h4>
+            <ul>
+              <li><a href="https://github.com/anarzone" target="_blank" rel="noopener"><b>GitHub</b><span>@anarzone ↗</span></a></li>
+              <li><a href="https://www.linkedin.com/in/haqverdiyev" target="_blank" rel="noopener"><b>LinkedIn</b><span>in/haqverdiyev ↗</span></a></li>
+              <li><a href="https://www.instagram.com/anarzone/" target="_blank" rel="noopener"><b>Instagram</b><span>@anarzone ↗</span></a></li>
+              <li><span class="row"><b>Strava</b><span>anarzone</span></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact wrap" id="contact" aria-labelledby="flyer-title">
+      <div class="flyer">
+        <i class="tape" aria-hidden="true"></i><i class="tape r" aria-hidden="true"></i>
+        <h2 class="flyer-title" id="flyer-title">Hiring? Building something? <span>Fancy a ride</span> in Köln?</h2>
+        <p class="flyer-sub">Tear one off, or write to <a href="mailto:hi@anar.to">hi@anar.to</a>.</p>
+        <div class="strips">
+          <button class="tab" type="button" data-open="note"><b>Send a</b><span>postcard</span></button>
+          <a class="tab" href="mailto:hi@anar.to"><b>Email</b><span>hi@anar.to</span></a>
+          <a class="tab" href="https://www.linkedin.com/in/haqverdiyev" target="_blank" rel="noopener"><b>LinkedIn</b><span>in/haqverdiyev</span></a>
+          <a class="tab" href="https://github.com/anarzone" target="_blank" rel="noopener"><b>GitHub</b><span>@anarzone</span></a>
+          <button class="tab" type="button" data-open="cvd"><b>Plain CV</b><span>read it</span></button>
+          <a class="tab" href="https://www.instagram.com/anarzone/" target="_blank" rel="noopener"><b>Instagram</b><span>@anarzone</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot wrap">
+    <span>Printed on a server in Germany. No cookies, no trackers.</span>
+    <span><!-- @site --><a href="/impressum">Impressum</a> · <a href="/datenschutz">Datenschutz</a><!-- /@site --><!-- @single --><button type="button" data-open="legal" data-legal="impressum">Impressum</button> · <button type="button" data-open="legal" data-legal="privacy">Datenschutz</button><!-- /@single --></span>
+  </footer>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- Zine reader -->
+<dialog id="reader" class="zd" aria-labelledby="zine-h">
+  <div class="zd-bar"><p id="zine-bar-no">The zine</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <article class="zd-body issue">
+    <p class="issue-no"><span id="zine-no"></span><span class="draft-pill">Draft</span></p>
+    <h1 id="zine-h"></h1>
+    <p class="dek" id="zine-dek"></p>
+    <p class="byline" id="zine-byline"></p>
+    <div class="prose" id="zine-prose"></div>
+    <aside class="plug" id="zine-plug"></aside>
+    <div class="sources" id="zine-sources"></div>
+  </article>
+</dialog>
+
+<!-- Plain CV -->
+<dialog id="cvd" class="zd" aria-labelledby="cvd-h">
+  <div class="zd-bar"><p>The plain CV</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <div class="zd-body"><div class="cv-sheet" id="cv-sheet"></div>
+    <div class="cv-actions"><button type="button" class="arcade" id="copy-cv-text">Copy as text</button><button type="button" class="arcade sheetb" id="copy-json-2">Copy cv.json</button></div>
+  </div>
+</dialog>
+
+<!-- Postcard -->
+<dialog id="note" class="zd" aria-labelledby="note-h">
+  <div class="zd-bar"><p>Say hallo</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <div class="zd-body">
+    <form class="postcard" id="postcard">
+      <div class="pc-l">
+        <h2 id="note-h">A postcard to Anar</h2>
+        <label for="pc-topic">About</label>
+        <select id="pc-topic" name="topic"><option>A role</option><option>One of the products</option><option>A project together</option><option>A ride in Köln</option><option>Just hallo</option></select>
+        <label for="pc-msg">Your message</label>
+        <textarea id="pc-msg" name="message" required maxlength="2000"></textarea>
+      </div>
+      <div class="pc-r">
+        <span class="postmark" aria-hidden="true">Köln<br>Nº 01</span>
+        <p class="to-line"><b>Anar Hagverdiyev</b>hi@anar.to<br>Köln, Deutschland</p>
+        <p class="pc-how">It opens in your mail app, addressed and ready to send.</p>
+        <button class="arcade" type="submit">Send the postcard ▸</button>
+        <p class="pc-status" id="pc-status" role="status" aria-live="polite"></p>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- @single -->
+<!-- Legal (the preview build only; the site has /impressum and /datenschutz) -->
+<dialog id="legal" class="zd" aria-labelledby="legal-h">
+  <div class="zd-bar"><p>Legal</p><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <div class="zd-body legal">{{LEGAL_DIALOG}}</div>
+</dialog>
+<!-- /@single -->
