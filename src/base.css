@@ -497,6 +497,44 @@ a.arcade { text-decoration: none; }
   .sec-title { font-size: 14.5vw; }
   .sec-sub { max-width: none; }
   .pb-card { padding: 22px 18px; }
+  /* less empty paper between sections */
+  .hero { padding-block: 20px 44px; }
+  .products, .route, .playbox, .zine, .life { padding-block: 0 48px; }
+  .sec-head { margin-bottom: 22px; }
+  .sec-sub { font-size: 17px; }
+  .wall { gap: 28px; }
+  .tickets { margin-top: 24px; }
+  .jerseys-z { margin-top: 24px; }
+  .foot { margin-top: 36px; }
+  /* the stamp and the contents list fill the column */
+  .stamp { width: min(80vw, 320px); height: min(80vw, 320px); }
+  .press { inset: 22%; font-size: 2.4rem; }
+  .inside ol { font-size: 16px; }
+  .inside a, .inside button { padding: 10px 0; }
+  /* each poster title fills its poster's width */
+  .p-cp .poster-title { font-size: 22vw; }
+  .p-ex .poster-title { font-size: 27vw; }
+  .shield { width: 26vw; }
+  .fg-row { gap: 16px; }
+  .fg-row .poster-title { font-size: 19.5vw; }
+  .tagline { font-size: 1.4rem; text-wrap: balance; }
+  .pb-card .pb-title { font-size: 20vw; } /* beats machines.css, which loads later */
+  /* jerseys: the shirt beside its name, the skills across the full card */
+  .jz { display: grid; grid-template-columns: 76px minmax(0, 1fr); column-gap: 14px; align-items: end; }
+  .jz svg { grid-row: span 2; width: 76px; height: 74px; }
+  .jz h4 { margin: 0 0 2px; font-size: 2.25rem; }
+  .jz p { margin: 0; align-self: start; font-size: 14px; }
+  .jz ul { grid-column: 1 / -1; margin-top: 12px; }
+  .jz li { font-size: 14px; }
+  /* zine, life, contact: bigger type in the space that was empty */
+  .press-note { max-width: none; font-size: 18px; }
+  .press-note b { font-size: 10.6vw; }
+  .ac-t { font-size: 1.85rem; }
+  .ac-p { font-size: 15px; }
+  .elsewhere a, .elsewhere .row { padding: 11px 0; font-size: 17px; }
+  .tab { min-height: 92px; padding: 16px 14px; }
+  .tab b { font-size: 1.8rem; }
+  .tab span { font-size: 14px; }
   .pb-card .pb-race pre { padding: 12px; font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; } /* beats machines.css, which loads later */
   .masthead-z { padding-block: 16px 10px; }
   .p-cp .ink-stamp { display: none; } /* the kicker already says it, and there is no free corner left */
@@ -513,8 +551,8 @@ a.arcade { text-decoration: none; }
   .start-sheet > div:nth-child(n + 3) { border-top: 2px dashed rgba(24, 23, 28, 0.35); }
   .jerseys-z { grid-template-columns: minmax(0, 1fr); }
   .route-sheet, .ride-poster { padding-inline: 16px; }
-  .also-card { grid-template-columns: 72px minmax(0, 1fr); }
-  .pic { width: 72px; height: 72px; }
+  .also-card { grid-template-columns: 88px minmax(0, 1fr); }
+  .pic { width: 88px; height: 88px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .strip, .sticker, .poster, .poster.wiggle, .zd[open], .mm-list li { animation: none; }
