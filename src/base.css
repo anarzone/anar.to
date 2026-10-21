@@ -483,14 +483,22 @@ a.arcade { text-decoration: none; }
   .headline { font-size: 20vw; }
   .strip { white-space: nowrap; }
   .intro { max-width: none; }
-  .stickers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 10px; align-items: center; }
-  .sticker .face { font-size: 2.15rem; }
-  .st-yellow { justify-self: center; } .st-yellow .face { width: 8.8rem; height: 8.8rem; font-size: 1.9rem; }
-  .st-pink { justify-self: center; margin-top: 22px; } .st-pink .face { width: 9.8rem; height: 9.8rem; font-size: 1.6rem; }
-  .st-black { grid-column: 1 / -1; justify-self: start; }
-  .st-blue { grid-column: 1 / -1; justify-self: end; margin-top: -10px; }
-  .st-bib { grid-column: 1 / -1; justify-self: center; margin-top: 4px; } .st-bib .face { width: 11rem; height: 8.4rem; font-size: 3.3rem; }
-  .hint { text-align: center; }
+  /* the stickers become full-width strips, like the menu: each one tilted a little, products marked with ▸ */
+  .stickers { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; margin-top: 26px; }
+  .stickers .sticker { filter: none; }
+  .stickers .st-yellow { --r: -1.4deg !important; } .stickers .st-pink { --r: 0.8deg !important; } .stickers .st-black { --r: -0.6deg !important; }
+  .stickers .st-blue { --r: 1deg !important; } .stickers .st-bib { --r: -1deg !important; }
+  .stickers .sticker .face { position: relative; box-sizing: border-box; display: flex; flex-direction: column; align-items: flex-start; width: 100%; height: auto; padding: 14px 52px 12px 16px;
+    border-radius: 0; clip-path: none; -webkit-mask: none; mask: none; font-size: 3.1rem; line-height: 0.86; text-align: left; box-shadow: 0.2rem 0.2rem 0 var(--ink); }
+  .stickers .sticker .face small { margin-top: 6px; font-size: 0.8rem; letter-spacing: 0.06em; }
+  .stickers button.face::after { content: "▸"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 2rem; }
+  .stickers .st-bib .face { border: 3px solid var(--ink); }
+  .stickers .st-bib .face::before { content: none; }
+  .stickers .bib-band { margin-bottom: 6px; font-size: 0.7rem; }
+  /* buttons in posters run the full width too, label left and arrow right */
+  .poster .arcade, .pb-card .arcade { display: flex; justify-content: space-between; width: 100%; box-sizing: border-box; }
+  .poster .poster-more { display: flex; justify-content: space-between; width: 100%; box-sizing: border-box; min-height: 46px; margin: 12px 0 0; font-size: 1.2rem; }
+  .route-actions .arcade { flex: 1 1 100%; justify-content: space-between; }
   .hero-side { flex-direction: column; align-items: stretch; }
   .stamp { align-self: center; width: 230px; height: 230px; }
   .press { inset: 50px; font-size: 1.9rem; }
