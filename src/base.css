@@ -18,7 +18,8 @@
   --fv-display: normal;
   --fv-body: "CASL" 1, "MONO" 0, "CRSV" 0.5;
   --fv-type: "CASL" 1, "MONO" 1;
-  --img-cafe: url("{{CAFE}}");
+  --img-cafe: url("{{CAFE}}"); /* grey: the posters show it through grayscale() */
+  --img-cafe-color: url("{{CAFE_COLOR}}"); /* the café Curiplay opens at the end of a round */
   --img-ex: url("{{EXPADU}}");
   --noise: url("{{NOISE}}");
 }

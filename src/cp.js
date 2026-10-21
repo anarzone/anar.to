@@ -32,15 +32,18 @@ function mountCuriplay() {
   const results = q('[data-cp-results]');
   const cafe = q('[data-cp-cafe]');
   const next = q('[data-cp-next]');
-  const sounds = {
-    correct: new Audio('{{A_RIGHT}}'), retry: new Audio('{{A_WRONG}}'),
-    complete: new Audio('{{A_COMPLETE}}'), money: new Audio('{{A_MONEY}}'),
+  // the sounds load when the quiz first opens (see start), not with the page
+  const SOUND_FILES = { correct: '{{A_RIGHT}}', retry: '{{A_WRONG}}', complete: '{{A_COMPLETE}}', money: '{{A_MONEY}}' };
+  let sounds = null;
+  const loadSounds = () => {
+    if (sounds) return;
+    sounds = Object.fromEntries(Object.entries(SOUND_FILES).map(([name, src]) => [name, new Audio(src)]));
+    sounds.money.volume = 0.5;
   };
-  sounds.money.volume = 0.5;
   let soundOn = true;
   const play = (name) => {
     if (!soundOn) return;
-    try { const a = sounds[name]; a.currentTime = 0; a.play().catch(() => {}); } catch (e) { /* sound is optional */ }
+    try { loadSounds(); const a = sounds[name]; a.currentTime = 0; a.play().catch(() => {}); } catch (e) { /* sound is optional */ }
   };
 
   const state = { index: 0, selected: null, results: [], scene: 'quiz', startedAt: 0, marked: new Set() };
@@ -204,6 +207,7 @@ function mountCuriplay() {
   }
 
   function start() {
+    loadSounds();
     state.index = 0; state.selected = null; state.results = []; state.marked = new Set(); state.startedAt = Date.now();
     setScene('quiz');
     render();

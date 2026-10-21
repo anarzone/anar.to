@@ -1,7 +1,8 @@
 """Download the Google Fonts the site uses and write src/fonts.css, so the site never loads anything from Google.
 
 Run once (or when a family changes): python3 scripts/fetch-fonts.py
-Only the latin and latin-ext subsets are kept.
+Only the latin and latin-ext subsets are kept. Afterwards run scripts/slim-fonts.py, and set the Recursive
+rules in src/fonts.css to font-style: normal (the slim files have no slant axis).
 """
 import pathlib
 import re

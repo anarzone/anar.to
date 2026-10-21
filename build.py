@@ -109,7 +109,7 @@ CP_FONTS = [  # Curiplay's own fonts, used inside its dialog
 
 # What each {{PLACEHOLDER}} in the sources points at
 FILES = {
-    'CAFE': 'img/cafe.jpg', 'EXPADU': 'img/expadu-new.jpg', 'FG_ICON': 'img/fg.png',
+    'CAFE': 'img/cafe.webp', 'CAFE_COLOR': 'img/cafe-color.webp', 'EXPADU': 'img/expadu.webp', 'FG_ICON': 'img/fg.png',
     'EX_TODAY': 'img/ex-scr-today-600.webp', 'EX_TRIP_HEAD': 'img/ex-trip-head-600.webp', 'EX_TRIP_BODY': 'img/ex-trip-body-600.webp',
     'EX_PAPER': 'img/ex-scr-paper-600.webp', 'EX_EVENTS': 'img/ex-scr-events-600.webp', 'EX_POSTER_STREET': 'img/ex-poster-street-300.webp',
     'EX_POSTER_CINEMA': 'img/ex-poster-cinema-300.webp', 'EX_STREET': 'img/ex-street-1400.webp',

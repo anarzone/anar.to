@@ -67,7 +67,7 @@
 /* Recursive, latin-ext */
 @font-face {
   font-family: 'Recursive';
-  font-style: oblique 0deg 15deg;
+  font-style: normal;
   font-weight: 300 1000;
   font-display: swap;
   src: url(/assets/fonts/google/recursive-latin-ext-7.woff2) format('woff2');
@@ -76,7 +76,7 @@
 /* Recursive, latin */
 @font-face {
   font-family: 'Recursive';
-  font-style: oblique 0deg 15deg;
+  font-style: normal;
   font-weight: 300 1000;
   font-display: swap;
   src: url(/assets/fonts/google/recursive-latin-8.woff2) format('woff2');

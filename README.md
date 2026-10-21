@@ -35,6 +35,7 @@ Other scripts:
 
 - `scripts/update-github.py` refreshes the contribution calendar (`GH_TOKEN=$(gh auth token) python3 scripts/update-github.py`). The deploy runs it before every build.
 - `scripts/fetch-fonts.py` downloads the Google Fonts once and writes `src/fonts.css`.
+- `scripts/slim-fonts.py` shrinks Recursive by fixing the axes the site never varies (needs `pip install fonttools brotli`).
 - `scripts/render-meta.mjs` renders `og.png`, the icons and `favicon.ico` with headless Chrome.
 
 ## Deploys

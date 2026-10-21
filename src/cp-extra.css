@@ -69,7 +69,7 @@
 
 /* ---------- The café (Curiplay home, café up top) ---------- */
 .cafe-scene { position:relative; overflow:hidden; aspect-ratio:3 / 2; max-height:58vh; width:100%; border-radius:30px 30px 13px 30px; background:#2A2230; box-shadow:0 10px 0 var(--plum-deep); }
-.cafe-img { position:absolute; inset:0; background-image:var(--img-cafe); background-size:cover; background-position:center; filter:brightness(.5) saturate(.55); transition:filter 1.3s ease; }
+.cafe-img { position:absolute; inset:0; background-image:var(--img-cafe-color); background-size:cover; background-position:center; filter:brightness(.5) saturate(.55); transition:filter 1.3s ease; }
 .cafe-scene[data-open="true"] .cafe-img { filter:none; }
 .cafe-sign { position:absolute; top:16px; left:50%; padding:8px 18px; border-radius:12px 12px 5px 12px; background:var(--red-deep); color:#FFF4F6; box-shadow:0 5px 0 #8F0A2C; font:400 20px "Fredoka One","Curiplay Display TR",sans-serif; transform:translateX(-50%) rotate(-3deg); transition:background-color 400ms ease, box-shadow 400ms ease; }
 .cafe-scene[data-open="true"] .cafe-sign { background:var(--green-deep); box-shadow:0 5px 0 #055A30; }
