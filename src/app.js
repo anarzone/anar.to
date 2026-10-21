@@ -115,14 +115,19 @@
 
   /* ---------- Cover: stickers and the big button ---------- */
   // A sticker only starts dragging after a few pixels, so the bib still works as a link when tapped.
+  // Let go of a sticker while moving it and it glides on a little, slowing down like paper sliding on a table.
+  const GLIDE_TIME = 260;   // ms; the glide's speed falls by about two thirds every GLIDE_TIME
+  const GLIDE_MAX = 160;    // px; the furthest a glide carries a sticker
   document.querySelectorAll('.sticker').forEach((el) => {
-    let pid = null, sx = 0, sy = 0, ox = 0, oy = 0, minX = 0, maxX = 0, moved = false;
+    let pid = null, sx = 0, sy = 0, ox = 0, oy = 0, minX = 0, maxX = 0, moved = false, trail = [], glide = 0;
+    const pos = () => [parseFloat(el.style.getPropertyValue('--dx')) || 0, parseFloat(el.style.getPropertyValue('--dy')) || 0];
+    const place = (x, y) => { el.style.setProperty('--dx', Math.min(maxX, Math.max(minX, x)) + 'px'); el.style.setProperty('--dy', y + 'px'); };
     el.addEventListener('pointerdown', (e) => {
       if (e.button !== 0) return;
-      pid = e.pointerId; moved = false;
+      cancelAnimationFrame(glide);
+      pid = e.pointerId; moved = false; trail = [];
       sx = e.clientX; sy = e.clientY;
-      ox = parseFloat(el.style.getPropertyValue('--dx')) || 0;
-      oy = parseFloat(el.style.getPropertyValue('--dy')) || 0;
+      [ox, oy] = pos();
       const r = el.getBoundingClientRect();
       minX = ox - r.left + 8; maxX = ox + (document.documentElement.clientWidth - r.right) - 8;
     });
@@ -134,10 +139,31 @@
         el.setPointerCapture(pid);
         el.classList.add('dragging');
       }
-      el.style.setProperty('--dx', Math.min(maxX, Math.max(minX, ox + e.clientX - sx)) + 'px');
-      el.style.setProperty('--dy', (oy + e.clientY - sy) + 'px');
+      place(ox + e.clientX - sx, oy + e.clientY - sy);
+      trail.push([e.timeStamp, e.clientX, e.clientY]);
+      while (trail.length > 2 && e.timeStamp - trail[0][0] > 90) trail.shift();
     });
-    const end = (e) => { if (e.pointerId !== pid) return; pid = null; el.classList.remove('dragging'); };
+    const release = (e) => {
+      // speed over the last few moves, in px per ms; a sticker held still before letting go stays put
+      if (reduced || trail.length < 2 || e.timeStamp - trail[trail.length - 1][0] > 60) return;
+      const [t0, x0, y0] = trail[0], [t1, x1, y1] = trail[trail.length - 1];
+      if (t1 - t0 < 8) return;
+      let vx = (x1 - x0) / (t1 - t0) * 0.6, vy = (y1 - y0) / (t1 - t0) * 0.6;
+      const reach = Math.hypot(vx, vy) * GLIDE_TIME;
+      if (reach < 4) return;
+      if (reach > GLIDE_MAX) { vx *= GLIDE_MAX / reach; vy *= GLIDE_MAX / reach; }
+      let [x, y] = pos(), last = performance.now();
+      const step = (now) => {
+        const dt = Math.min(32, now - last); last = now;
+        x += vx * dt; y += vy * dt;
+        const k = Math.exp(-dt / GLIDE_TIME); vx *= k; vy *= k;
+        if (x <= minX || x >= maxX) vx = 0;   // the page edge stops it sideways
+        place(x, y);
+        if (Math.hypot(vx, vy) > 0.01) glide = requestAnimationFrame(step);
+      };
+      glide = requestAnimationFrame(step);
+    };
+    const end = (e) => { if (e.pointerId !== pid) return; pid = null; el.classList.remove('dragging'); if (moved && e.type === 'pointerup') release(e); };
     el.addEventListener('pointerup', end);
     el.addEventListener('pointercancel', end);
     // a drag must not count as a click on the sticker's link or button
