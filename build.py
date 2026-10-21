@@ -5,12 +5,14 @@
     python3 build.py --single FILE.html  one self-contained HTML file, for previews published as claude.ai artifacts
 """
 import argparse, base64, datetime, hashlib, json, math, pathlib, re, shutil, subprocess, sys, urllib.parse
+from html import escape
 
 ROOT = pathlib.Path(__file__).resolve().parent
 SRC = ROOT / 'src'
 ASSETS = ROOT / 'assets'
 DIST = ROOT / 'dist'
 SITE = json.loads((ROOT / 'site.json').read_text())
+CV = json.loads((SRC / 'cv-data.json').read_text())
 SQLJS = 'sql.js-1.12.0'
 
 
@@ -166,6 +168,35 @@ def legal(name, release):
     return text
 
 
+def script_json(data):
+    """JSON that is safe inside a <script> element."""
+    return json.dumps(data, ensure_ascii=False).replace('</', '<\\/')
+
+
+def cv_sheet():
+    """The plain CV, printed into the page so that crawlers and readers without JavaScript get the whole CV."""
+    who, edu = SITE['owner'], CV['prologue']
+    roles = [s for s in reversed(CV['stages']) if s['id'] != 'baku']
+    li = lambda items: '<ul>' + ''.join(f'<li>{escape(h)}</li>' for h in items) + '</ul>'
+    team = lambda r: escape(r['team'] + (f" ({r['note']})" if r.get('note') else ''))
+    return (f'<h1 id="cvd-h">{escape(who["name"])}</h1>\n'
+            '<p class="t">Senior Backend Engineer · PHP | Symfony | Laravel | Domain-Driven Design</p>\n'
+            f'<p class="c">{who["city"]}, Germany · {who["email"]} · anar.to · github.com/anarzone · linkedin.com/in/haqverdiyev</p>\n'
+            f'<h2>Profile</h2><p>{escape(CV["profile"])}</p>\n<h2>Experience</h2>\n'
+            + ''.join(f'<div class="role"><div class="row"><b>{team(r)}</b><b>{escape(r["dates"])}</b></div>'
+                      f'<div class="row sub"><span>{escape(r["role"])}</span><span>{escape(r["place"])}</span></div><p>{escape(r["summary"])}</p>{li(r["highlights"])}</div>\n'
+                      for r in roles)
+            + '<h2>Earlier experience</h2>\n'
+            + ''.join(f'<div class="role"><div class="row"><b>{escape(r["team"])} · {escape(r["role"])}</b><b>{escape(r["dates"])}</b></div>'
+                      f'<div class="row sub"><span>{escape(r["place"])}</span></div></div>\n' for r in CV['earlier'])
+            + li(CV['stages'][0]['highlights'])
+            + '\n<h2>Selected projects</h2><ul>' + ''.join(f'<li><b>{escape(t)}.</b> {escape(d)}</li>' for t, d in CV['projects']) + '</ul>\n'
+            + '<h2>Technical skills</h2><dl>' + ''.join(f'<div><dt>{escape(k)}:</dt> <dd>{escape(v)}</dd></div>' for k, v in CV['skills']) + '</dl>\n'
+            + '<h2>Languages</h2><p>' + ' · '.join(f'{escape(l)} ({escape(v)})' for l, v in CV['languages']) + '</p>\n'
+            + f'<h2>Education</h2><div class="row"><b>{escape(edu["team"])} · {escape(edu["role"])}</b><b>{escape(edu["dates"])}</b></div>'
+            f'<div class="row sub"><span>{escape(edu["place"])}</span></div>')
+
+
 def fill(text, subs):
     for k, v in subs.items():
         text = text.replace('{{' + k + '}}', v)
@@ -192,6 +223,7 @@ def build_single(out):
     imp_h2 = '<h2 id="legal-h" data-legal-anchor="impressum">'
     privacy_h2 = '<h2 data-legal-anchor="privacy">' if IMPRESSUM else '<h2 id="legal-h" data-legal-anchor="privacy">'
     subs.update({'NOISE': 'data:image/svg+xml,' + urllib.parse.quote(NOISE), 'BURST': burst(), 'GH_CAL': (ASSETS / 'data' / 'gh.json').read_text().strip(),
+                 'CV': script_json(CV), 'CV_SHEET': cv_sheet(),
                  'SQLJS_BASE': f'https://cdnjs.cloudflare.com/ajax/libs/sql.js/{SQLJS.split("-")[1]}/',
                  'LEGAL_DIALOG': (legal('impressum', False).replace('<h1>', imp_h2).replace('</h1>', '</h2>') if IMPRESSUM else '')
                  + legal('datenschutz', False).replace('<h1>', privacy_h2).replace('</h1>', '</h2>')})
@@ -225,7 +257,10 @@ def fingerprint(rel, data=None):
 
 
 def head(title, description, path, css_url, extra=''):
-    url = SITE['url'] + path
+    """path is the page's own address; None for the 404 page, which answers at every missing URL and stays out of search."""
+    url = SITE['url'] + path if path else None
+    where = f'<link rel="canonical" href="{url}">\n<meta name="robots" content="max-image-preview:large">' if url else '<meta name="robots" content="noindex">'
+    og_url = f'<meta property="og:url" content="{url}">\n' if url else ''
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -233,15 +268,14 @@ def head(title, description, path, css_url, extra=''):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="description" content="{description}">
-<link rel="canonical" href="{url}">
+{where}
 <meta name="theme-color" content="#ECEAE4">
 <link rel="icon" href="/favicon.ico" sizes="32x32">
 <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="anar.to">
-<meta property="og:url" content="{url}">
-<meta property="og:title" content="{SITE['share_title'] if path == '/' else title}">
+{og_url}<meta property="og:title" content="{SITE['share_title'] if path == '/' else title}">
 <meta property="og:description" content="{description}">
 <meta property="og:image" content="{SITE['url']}/og.png">
 <meta property="og:image:width" content="1200">
@@ -260,6 +294,35 @@ def chrome(html):
     return mast, foot
 
 
+# The sources behind each page; the last commit that touched them is the page's lastmod in the sitemap
+SOURCES = {'/': ['src', ':(exclude)src/legal', 'assets/img', 'site.json'],
+           '/impressum': ['src/legal/impressum.html', 'site.json'], '/datenschutz': ['src/legal/datenschutz.html', 'site.json']}
+
+
+def changed(path):
+    """The day a page's sources last changed in git (deploys need the full history), or today outside a checkout."""
+    if shutil.which('git'):
+        r = subprocess.run(['git', 'log', '-1', '--format=%cs', '--', *SOURCES[path]], cwd=ROOT, capture_output=True, text=True)
+        if r.returncode == 0 and r.stdout.strip():
+            return r.stdout.strip()
+    return datetime.date.today().isoformat()
+
+
+def structured_data():
+    """schema.org for the front page: the site (Google takes its name from this) and the profile page about Anar."""
+    who, home = SITE['owner'], SITE['url'] + '/'
+    person = {'@type': 'Person', '@id': home + '#person', 'name': who['name'], 'alternateName': who['alternate_name'], 'url': home,
+              'email': 'mailto:' + who['email'], 'jobTitle': 'Backend developer',
+              'address': {'@type': 'PostalAddress', 'addressLocality': who['city'], 'addressCountry': 'DE'},
+              'alumniOf': {'@type': 'CollegeOrUniversity', 'name': CV['prologue']['team']},
+              'knowsAbout': CV['jerseys'][0]['items'], 'knowsLanguage': [l for l, _ in CV['languages']],
+              'sameAs': ['https://github.com/anarzone', 'https://www.linkedin.com/in/haqverdiyev', 'https://www.instagram.com/anarzone/']}
+    return {'@context': 'https://schema.org', '@graph': [
+        {'@type': 'WebSite', '@id': home + '#website', 'url': home, 'name': 'anar.to', 'inLanguage': 'en'},
+        {'@type': 'ProfilePage', '@id': home, 'url': home, 'name': SITE['title'], 'description': SITE['description'], 'inLanguage': 'en',
+         'isPartOf': {'@id': home + '#website'}, 'dateModified': changed('/'), 'mainEntity': person}]}
+
+
 def build_site(release):
     if release and IMPRESSUM and not SITE['impressum']['street'].strip():
         sys.exit('launch blocker: the Impressum is switched on but site.json impressum.street is empty (it needs a full postal address)')
@@ -270,7 +333,8 @@ def build_site(release):
 
     subs = {k: fingerprint(v) for k, v in FILES.items()}
     subs.update({'NOISE': fingerprint('img/noise.svg', NOISE.encode()), 'BURST': burst(),
-                 'GH_CAL': (ASSETS / 'data' / 'gh.json').read_text().strip(), 'SQLJS_BASE': f'/assets/vendor/{SQLJS}/'})
+                 'GH_CAL': (ASSETS / 'data' / 'gh.json').read_text().strip(), 'SQLJS_BASE': f'/assets/vendor/{SQLJS}/',
+                 'CV': script_json(CV), 'CV_SHEET': cv_sheet()})
     fonts = {}
     def font(name):
         fonts[name] = fonts.get(name) or fingerprint(f'fonts/{name}')
@@ -287,23 +351,19 @@ def build_site(release):
 
     preload = ''.join(f'<link rel="preload" href="{font(f)}" as="font" type="font/woff2" crossorigin>\n'
                       for f in ('google/recursive-latin-8.woff2', 'google/big-shoulders-display-latin-1.woff2'))
-    person = {'@context': 'https://schema.org', '@type': 'Person', 'name': SITE['owner']['name'], 'url': SITE['url'],
-              'email': 'mailto:' + SITE['owner']['email'], 'jobTitle': 'Backend developer',
-              'address': {'@type': 'PostalAddress', 'addressLocality': 'Köln', 'addressCountry': 'DE'},
-              'sameAs': ['https://github.com/anarzone', 'https://www.linkedin.com/in/haqverdiyev', 'https://www.instagram.com/anarzone/']}
-    extra = preload + f'<script src="{js_url}" defer></script>\n<script type="application/ld+json">{json.dumps(person, ensure_ascii=False)}</script>\n'
+    extra = preload + f'<script src="{js_url}" defer></script>\n<script type="application/ld+json">{script_json(structured_data())}</script>\n'
     body = fill(html, subs)
     (DIST / 'index.html').write_text(head(SITE['title'], SITE['description'], '/', css_url, extra) + '</head>\n<body>\n' + body + '\n</body>\n</html>\n')
 
     mast, foot = chrome(body)
     def page(file, title, description, path, main, lang='en'):
-        doc = (head(title, description, path, css_url, '<meta name="robots" content="noindex">\n' if file == '404.html' else '') + '</head>\n<body class="doc-page">\n<div class="page-z">\n  ' + mast + '\n'
+        doc = (head(title, description, path, css_url) + '</head>\n<body class="doc-page">\n<div class="page-z">\n  ' + mast + '\n'
                + f'  <main class="doc wrap {main[0]}" lang="{lang}">\n{main[1]}\n  </main>\n  ' + foot + '\n</div>\n</body>\n</html>\n')
         (DIST / file).write_text(fill(doc, {}))
     if IMPRESSUM:
         page('impressum.html', 'Impressum · anar.to', 'Impressum für anar.to, die Website von Anar Hagverdiyev in Köln.', '/impressum', ('legal', legal('impressum', release)), 'de')
     page('datenschutz.html', 'Privacy · anar.to', 'How anar.to handles data: no cookies, no analytics, no trackers.', '/datenschutz', ('legal', legal('datenschutz', release)))
-    page('404.html', 'Off route · anar.to', "This page isn't on anar.to.", '/404', ('lost', """    <p class="kicker">Error 404 · off route</p>
+    page('404.html', 'Off route · anar.to', "This page isn't on anar.to.", None, ('lost', """    <p class="kicker">Error 404 · off route</p>
     <h1>Wrong turn.</h1>
     <p>This page isn't on the map. The route starts at the front page.</p>
     <a class="arcade" href="/">Back to the start <span aria-hidden="true">▸</span></a>"""))
@@ -312,8 +372,7 @@ def build_site(release):
         if f.is_file() and not f.name.startswith('.'):
             shutil.copy2(f, DIST / f.name)
     (DIST / 'robots.txt').write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE['url']}/sitemap.xml\n")
-    today = datetime.date.today().isoformat()
-    urls = ''.join(f"  <url><loc>{SITE['url']}{p}</loc><lastmod>{today}</lastmod></url>\n" for p in ('/', *(['/impressum'] if IMPRESSUM else []), '/datenschutz'))
+    urls = ''.join(f"  <url><loc>{SITE['url']}{p}</loc><lastmod>{changed(p)}</lastmod></url>\n" for p in ('/', *(['/impressum'] if IMPRESSUM else []), '/datenschutz'))
     (DIST / 'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
 
     # every local URL the pages, the stylesheet and the script mention must exist

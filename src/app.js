@@ -214,7 +214,6 @@
   /* ---------- Sections ---------- */
   mountRoute();
   mountLife();
-  $('cv-sheet').innerHTML = cvPlainHTML();
 
   /* ---------- Deep links: #curiplay, #expadu, #focusguard, #cv, #issue-rules ---------- */
   const deep = { curiplay: 'cp', expadu: 'ex', focusguard: 'fg', cv: 'cvd', postcard: 'note' };

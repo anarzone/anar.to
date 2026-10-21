@@ -20,6 +20,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0  # the sitemap's lastmod dates come from each page's last commit
 
       - name: Decide whether this run deploys
         id: gate

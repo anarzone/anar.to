@@ -11,7 +11,8 @@ No framework and no dependencies at runtime: hand-written HTML, CSS and JavaScri
 | Path | What it holds |
 |---|---|
 | `src/body.html`, `src/base.css`, `src/machines.css`, `src/app.js` | the page itself |
-| `src/route.js` | The Route: the CV as a stage race, the GitHub calendar, the plain CV and `cv.json` |
+| `src/cv-data.json` | the CV's facts; the build prints the plain CV from them into the page, so it reads without JavaScript |
+| `src/route.js` | The Route: the CV as a stage race, the GitHub calendar, the copyable text CV and `cv.json` |
 | `src/cp.*`, `src/ex.*`, `src/fg.*` | the product dialogs (Curiplay, Expadu, FocusGuard), each in its own design |
 | `src/m-*.html/.css/.js` | the playable climbs and the SQL time trial (picked up automatically) |
 | `src/legal/` | Impressum and privacy policy |

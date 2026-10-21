@@ -1,0 +1,183 @@
+{
+  "profile": "Backend engineer with 7+ years in PHP, specialising in Symfony and Domain-Driven Design. At plusForta (Areal Bank Gruppe) I led the modernisation of a legacy Symfony platform in a regulated banking environment, built GitLab CI/CD from scratch, cutting deployment from roughly 60 minutes to under 10, and introduced automated testing to a codebase that had none. Most recently I designed and shipped a production Progressive Web App end to end as sole engineer: Laravel backend, real-time multimodal transit routing, and a deterministic rules engine that reconfigures the application per user context. I own architecture decisions from data model through to deployment.",
+  "prologue": {
+    "id": "prologue",
+    "label": "Prologue",
+    "team": "Khazar University",
+    "role": "BSc Computer Science",
+    "dates": "2011 – 2016",
+    "place": "Baku, Azerbaijan",
+    "start": 2011.67,
+    "end": 2016.5,
+    "summary": "A computer science degree: the short time trial before the real race.",
+    "highlights": [],
+    "climbs": [],
+    "color": "#ECEAE4"
+  },
+  "stages": [
+    {
+      "id": "baku",
+      "label": "Stage 1",
+      "team": "PRONET → NetGroup",
+      "role": "Software Developer → Backend Developer (contract)",
+      "dates": "2019 – 2021",
+      "place": "Baku, Azerbaijan",
+      "start": 2019,
+      "end": 2021.92,
+      "color": "#FFE800",
+      "summary": "First professional kilometres: Laravel e-commerce and ERP reporting for real businesses.",
+      "highlights": [
+        "Built and deployed Laravel e-commerce platforms: product catalogues, cart and order management.",
+        "Integrated secure payment gateways with automated invoice generation.",
+        "Designed ERP reporting modules in raw SQL, bypassing the ORM for heavy data aggregation."
+      ],
+      "climbs": [
+        {"at": 2019.75, "cat": "4", "name": "First payment-gateway integration"},
+        {"at": 2021, "cat": "3", "name": "ERP reporting in raw SQL", "play": "m-sql"}
+      ]
+    },
+    {
+      "id": "talents",
+      "label": "Stage 2",
+      "team": "talentsconnect AG",
+      "role": "Software Engineer",
+      "dates": "Dec 2021 – Oct 2022",
+      "place": "Köln · remote",
+      "start": 2021.92,
+      "end": 2022.75,
+      "color": "#7FB8DE",
+      "summary": "Backend engineer on a large-scale SaaS recruitment platform serving enterprise clients.",
+      "highlights": [
+        "Introduced Domain-Driven Design into a legacy PHP codebase, so the domain became testable on its own.",
+        "Replaced inefficient ORM paths with tuned raw SQL on high-traffic listing endpoints.",
+        "Shipped backend features for enterprise clients in retail and food service."
+      ],
+      "climbs": [{"at": 2022.4, "cat": "2", "name": "DDD into a legacy codebase", "play": "m-ddd"}]
+    },
+    {
+      "id": "plusforta",
+      "label": "Stage 3",
+      "team": "plusForta GmbH",
+      "note": "Areal Bank Gruppe",
+      "role": "Senior PHP Developer",
+      "dates": "Oct 2022 – Dec 2025",
+      "place": "Germany · hybrid",
+      "start": 2022.75,
+      "end": 2025.92,
+      "color": "#FF48B0",
+      "summary": "Core engineer on a Symfony platform in a regulated, bank-owned environment.",
+      "highlights": [
+        "Led the upgrade from a long-unsupported Symfony version, clearing years of technical debt and restoring security compliance.",
+        "Built GitLab CI/CD from scratch, replacing a manual process: release time from roughly 60 minutes to under 10.",
+        "Introduced automated testing with PHPUnit and Pest to a codebase with no coverage.",
+        "Profiled and fixed bottlenecks on critical paths; mentored developers through code review."
+      ],
+      "climbs": [
+        {"at": 2023.35, "cat": "1", "name": "CI/CD from zero: 60 → <10 min", "play": "m-release"},
+        {"at": 2024.3, "cat": "HC", "name": "Symfony upgrade in a regulated bank"},
+        {"at": 2025.3, "cat": "2", "name": "Tests where there were none"}
+      ]
+    },
+    {
+      "id": "expadu",
+      "label": "Stage 4a",
+      "team": "Expadu",
+      "note": "own product, live",
+      "role": "Backend Engineer, sole developer",
+      "dates": "Dec 2025 – now",
+      "place": "Köln",
+      "start": 2025.92,
+      "end": null,
+      "color": "#FFB21C",
+      "summary": "Designed, built and shipped a live PWA for everyday life and public administration in North Rhine-Westphalia, as the only engineer.",
+      "highlights": [
+        "A deterministic, attribute-based rules engine: 24+ residence-permit scenarios validated against official sources.",
+        "Day Composer: a scheduler that builds a feasible day from constraints, opening hours and live travel times.",
+        "Real-time transit: MOTIS routing over live VRS GTFS-Realtime feeds, rendered with MapLibre.",
+        "Owned CI, deployment and production operations from first commit to public release."
+      ],
+      "climbs": [
+        {"at": 2026.06, "cat": "1", "name": "Rules engine: 24+ permit scenarios", "play": "m-rules"},
+        {"at": "now", "cat": "HC", "name": "Summit finish: a live product, solo", "play": "ex"}
+      ]
+    },
+    {
+      "id": "curiplay",
+      "label": "Stage 4b",
+      "team": "Curiplay",
+      "note": "own product, in development",
+      "role": "Backend Engineer, sole developer",
+      "dates": "Mar 2026 – now",
+      "place": "Köln",
+      "start": 2026.22,
+      "end": null,
+      "color": "#C9A2F0",
+      "summary": "Designing and building a German vocabulary game where learning runs a café, as the only engineer: Laravel backend, spaced repetition and a 3D café.",
+      "highlights": [
+        "FSRS-6 spaced repetition written in PHP and checked against the reference py-fsrs: 0 mismatches over 2,478 reviews.",
+        "Every answer is one database transaction with row locks and an idempotent event id, stored as an immutable review event.",
+        "A two-ledger design: only real reviews pay, practice pays nothing, and café levels come only from learning.",
+        "A 3D café in the browser, modelled from Python scripts in Blender."
+      ],
+      "climbs": [
+        {"at": 2026.4, "cat": "1", "name": "Only learning pays: the two-ledger economy", "play": "m-cp"},
+        {"at": 2026.62, "cat": "2", "name": "FSRS-6 in PHP: 0 mismatches in 2,478 reviews"}
+      ]
+    }
+  ],
+  "earlier": [
+    {"team": "NetGroup LLC", "role": "Backend Software Developer (contract)", "dates": "2020 – 2021", "place": "Baku, Azerbaijan"},
+    {"team": "PRONET", "role": "Software Developer", "dates": "2019 – 2020", "place": "Baku, Azerbaijan"}
+  ],
+  "sprints": [{"at": 2026.34, "name": "FocusGuard", "what": "macOS focus app: log, nudge, block", "open": "fg", "label": "Try it"}],
+  "jerseys": [
+    {
+      "kind": "yellow",
+      "name": "Yellow jersey",
+      "meaning": "What I do best",
+      "items": ["PHP 8.x", "Symfony", "Laravel", "Domain-Driven Design", "REST API design", "MySQL", "PostgreSQL"]
+    },
+    {
+      "kind": "polka",
+      "name": "Polka dots",
+      "meaning": "The hard climbs I enjoy",
+      "items": ["Legacy modernisation", "Raw SQL and query tuning", "CQRS", "Event-driven design", "Modular monoliths", "RabbitMQ and Messenger"]
+    },
+    {
+      "kind": "green",
+      "name": "Green jersey",
+      "meaning": "Shipping consistently",
+      "items": ["GitLab CI/CD", "Docker", "PHPUnit and Pest", "Deployment automation", "Code review and mentoring", "Redis and Elasticsearch"]
+    },
+    {
+      "kind": "white",
+      "name": "White jersey",
+      "meaning": "Newest in the bag",
+      "items": ["Swift and SwiftUI", "React and TypeScript", "MapLibre and GTFS-Realtime", "Blender", "AI-assisted development"]
+    }
+  ],
+  "skills": [
+    ["Languages & frameworks", "PHP 8.x, Symfony, Laravel, JavaScript, React"],
+    [
+      "Architecture",
+      "Domain-Driven Design (bounded contexts, domain events), CQRS, event-driven architecture, modular monoliths, REST API design, OOP, SOLID, refactoring patterns"
+    ],
+    ["Data", "MySQL, PostgreSQL, Doctrine, Eloquent, Redis (caching), Elasticsearch, query optimisation, raw SQL"],
+    ["Messaging", "RabbitMQ, Symfony Messenger, queue-based processing"],
+    ["Testing", "PHPUnit, Pest, automated testing"],
+    ["DevOps", "Docker, GitLab CI/CD, Git, deployment automation"],
+    ["Ways of working", "Code review, mentoring, AI-assisted development (Claude, Gemini)"]
+  ],
+  "languages": [["Azerbaijani", "native"], ["Turkish", "fluent"], ["English", "C1–C2"], ["German", "B2"]],
+  "projects": [
+    [
+      "PHP & Laravel internals visualisers",
+      "Interactive tools tracing the Laravel request lifecycle and service-container resolution, plus a deep-dive into Symfony Messenger’s bus/transport split and CQRS multi-bus wiring."
+    ],
+    [
+      "Technical study tooling",
+      "A Laravel application with a 120-question bank covering framework internals, Eloquent, MySQL, PHP OOP, architecture, API design and testing."
+    ],
+    ["Own products", "Expadu (live PWA), Curiplay (in development), FocusGuard (macOS app). See anar.to."]
+  ]
+}

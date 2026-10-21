@@ -4,6 +4,7 @@
 """
 import http.server
 import pathlib
+import re
 import sys
 
 DIST = pathlib.Path(__file__).resolve().parent.parent / 'dist'
@@ -26,10 +27,18 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         super().__init__(*args, directory=str(DIST), **kwargs)
 
     def send_head(self):
-        # try_files $uri $uri/ $uri.html =404
-        path = self.path.split('?', 1)[0].split('#', 1)[0]
+        path, _, query = self.path.split('#', 1)[0].partition('?')
+        # one address per page: /index and /index.html are /, /datenschutz.html is /datenschutz
+        clean = '/' if re.fullmatch(r'/index(\.html)?', path) else re.sub(r'^/([a-z0-9-]+)\.html$', r'/\1', path)
+        if clean != path:
+            self.send_response(301)
+            self.send_header('Location', clean + ('?' + query if query else ''))
+            self.send_header('Content-Length', '0')
+            self.end_headers()
+            return None
+        # try_files $uri $uri/ $uri.html =404, and the 404 page has no address of its own
         target = DIST / path.lstrip('/')
-        if path != '/' and not target.exists() and (DIST / (path.lstrip('/') + '.html')).exists():
+        if path not in ('/', '/404') and not target.exists() and (DIST / (path.lstrip('/') + '.html')).exists():
             self.path = path + '.html'
         elif path != '/' and not target.exists():
             body = (DIST / '404.html').read_bytes()
