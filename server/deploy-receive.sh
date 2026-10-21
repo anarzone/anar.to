@@ -27,7 +27,7 @@ case "$cmd" in
     if ! tar -xzf - -C "$dir" --no-same-owner --no-same-permissions; then
       rm -rf "$dir"; echo "unpacking failed" >&2; exit 1
     fi
-    for f in index.html 404.html impressum.html datenschutz.html; do
+    for f in index.html 404.html datenschutz.html; do
       [ -s "$dir/$f" ] || { rm -rf "$dir"; echo "release is missing $f" >&2; exit 1; }
     done
     chmod -R u=rwX,go=rX "$dir"

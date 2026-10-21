@@ -1,6 +1,6 @@
 """Build anar.to. Standard library only.
 
-    python3 build.py                     the site, in dist/ (index, 404, impressum, datenschutz, fingerprinted assets)
+    python3 build.py                     the site, in dist/ (index, 404, datenschutz, impressum if switched on, fingerprinted assets)
     python3 build.py --release           the same, but stops while a launch blocker remains (e.g. no Impressum street)
     python3 build.py --single FILE.html  one self-contained HTML file, for previews published as claude.ai artifacts
 """
@@ -145,16 +145,23 @@ def assemble(mode):
     html = blocks(html, 'site', mode == 'site')
     html = blocks(html, 'single', mode == 'single')
     html = blocks(html, 'ride-log', SITE['ride_log'])
+    html = blocks(html, 'impressum', IMPRESSUM)
     js = '\n'.join([read('zine-data.js'), read('route.js'), read('cp.js'), read('fg.js'), read('ex.js')]
                    + [read(f'{n}.js') for n in m_names if (SRC / f'{n}.js').exists()] + [read('app.js')])
     return css, html, js
 
 
+IMPRESSUM = SITE['impressum']['enabled']
+
+
 def legal(name, release):
-    imp = SITE['impressum']
+    who, imp = SITE['owner'], SITE['impressum']
     street = imp['street'] or ('' if release else '[Straße und Hausnummer]')
+    # with the Impressum on, the privacy page names the full postal address; without it, the city and the email
+    address = f"{street}<br>{imp['postcode']} {who['city']}, {who['country']}" if IMPRESSUM else f"{who['city']}, {who['country']}"
     text = read(f'legal/{name}.html')
-    for k, v in {'NAME': imp['name'], 'STREET': street, 'CITY': imp['city'], 'COUNTRY': imp['country'], 'EMAIL': imp['email'], 'UPDATED': SITE['updated']}.items():
+    for k, v in {'NAME': who['name'], 'STREET': street, 'POSTCODE': imp['postcode'], 'CITY': who['city'], 'COUNTRY': who['country'],
+                 'ADDRESS': address, 'EMAIL': who['email'], 'UPDATED': SITE['updated']}.items():
         text = text.replace('{{' + k + '}}', v)
     return text
 
@@ -181,10 +188,13 @@ def build_single(out):
     css, html, js = assemble('single')
     data_uri = lambda rel: f"data:{MIME[pathlib.Path(rel).suffix]};base64," + base64.b64encode((ASSETS / rel).read_bytes()).decode()
     subs = {k: data_uri(v) for k, v in FILES.items()}
+    # the dialog's first heading names it for screen readers
+    imp_h2 = '<h2 id="legal-h" data-legal-anchor="impressum">'
+    privacy_h2 = '<h2 data-legal-anchor="privacy">' if IMPRESSUM else '<h2 id="legal-h" data-legal-anchor="privacy">'
     subs.update({'NOISE': 'data:image/svg+xml,' + urllib.parse.quote(NOISE), 'BURST': burst(), 'GH_CAL': (ASSETS / 'data' / 'gh.json').read_text().strip(),
                  'SQLJS_BASE': f'https://cdnjs.cloudflare.com/ajax/libs/sql.js/{SQLJS.split("-")[1]}/',
-                 'LEGAL_DIALOG': legal('impressum', False).replace('<h1>', '<h2 id="legal-h" data-legal-anchor="impressum">').replace('</h1>', '</h2>')
-                 + legal('datenschutz', False).replace('<h1>', '<h2 data-legal-anchor="privacy">').replace('</h1>', '</h2>')})
+                 'LEGAL_DIALOG': (legal('impressum', False).replace('<h1>', imp_h2).replace('</h1>', '</h2>') if IMPRESSUM else '')
+                 + legal('datenschutz', False).replace('<h1>', privacy_h2).replace('</h1>', '</h2>')})
     css = re.sub(r'\{\{FONT:([^}]+)\}\}', lambda m: data_uri(f'fonts/{m.group(1)}'), css)
     google = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
               '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700..900'
@@ -251,8 +261,8 @@ def chrome(html):
 
 
 def build_site(release):
-    if release and not SITE['impressum']['street'].strip():
-        sys.exit('launch blocker: site.json impressum.street is empty (the Impressum needs a full postal address)')
+    if release and IMPRESSUM and not SITE['impressum']['street'].strip():
+        sys.exit('launch blocker: the Impressum is switched on but site.json impressum.street is empty (it needs a full postal address)')
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir()
@@ -277,8 +287,8 @@ def build_site(release):
 
     preload = ''.join(f'<link rel="preload" href="{font(f)}" as="font" type="font/woff2" crossorigin>\n'
                       for f in ('google/recursive-latin-8.woff2', 'google/big-shoulders-display-latin-1.woff2'))
-    person = {'@context': 'https://schema.org', '@type': 'Person', 'name': SITE['impressum']['name'], 'url': SITE['url'],
-              'email': 'mailto:' + SITE['impressum']['email'], 'jobTitle': 'Backend developer',
+    person = {'@context': 'https://schema.org', '@type': 'Person', 'name': SITE['owner']['name'], 'url': SITE['url'],
+              'email': 'mailto:' + SITE['owner']['email'], 'jobTitle': 'Backend developer',
               'address': {'@type': 'PostalAddress', 'addressLocality': 'Köln', 'addressCountry': 'DE'},
               'sameAs': ['https://github.com/anarzone', 'https://www.linkedin.com/in/haqverdiyev', 'https://www.instagram.com/anarzone/']}
     extra = preload + f'<script src="{js_url}" defer></script>\n<script type="application/ld+json">{json.dumps(person, ensure_ascii=False)}</script>\n'
@@ -290,7 +300,8 @@ def build_site(release):
         doc = (head(title, description, path, css_url, '<meta name="robots" content="noindex">\n' if file == '404.html' else '') + '</head>\n<body class="doc-page">\n<div class="page-z">\n  ' + mast + '\n'
                + f'  <main class="doc wrap {main[0]}" lang="{lang}">\n{main[1]}\n  </main>\n  ' + foot + '\n</div>\n</body>\n</html>\n')
         (DIST / file).write_text(fill(doc, {}))
-    page('impressum.html', 'Impressum · anar.to', 'Impressum für anar.to, die Website von Anar Hagverdiyev in Köln.', '/impressum', ('legal', legal('impressum', release)), 'de')
+    if IMPRESSUM:
+        page('impressum.html', 'Impressum · anar.to', 'Impressum für anar.to, die Website von Anar Hagverdiyev in Köln.', '/impressum', ('legal', legal('impressum', release)), 'de')
     page('datenschutz.html', 'Privacy · anar.to', 'How anar.to handles data: no cookies, no analytics, no trackers.', '/datenschutz', ('legal', legal('datenschutz', release)))
     page('404.html', 'Off route · anar.to', "This page isn't on anar.to.", '/404', ('lost', """    <p class="kicker">Error 404 · off route</p>
     <h1>Wrong turn.</h1>
@@ -302,7 +313,7 @@ def build_site(release):
             shutil.copy2(f, DIST / f.name)
     (DIST / 'robots.txt').write_text(f"User-agent: *\nAllow: /\n\nSitemap: {SITE['url']}/sitemap.xml\n")
     today = datetime.date.today().isoformat()
-    urls = ''.join(f"  <url><loc>{SITE['url']}{p}</loc><lastmod>{today}</lastmod></url>\n" for p in ('/', '/impressum', '/datenschutz'))
+    urls = ''.join(f"  <url><loc>{SITE['url']}{p}</loc><lastmod>{today}</lastmod></url>\n" for p in ('/', *(['/impressum'] if IMPRESSUM else []), '/datenschutz'))
     (DIST / 'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{urls}</urlset>\n')
 
     # every local URL the pages, the stylesheet and the script mention must exist

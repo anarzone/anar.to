@@ -28,7 +28,7 @@ python3 build.py              # writes dist/
 python3 scripts/serve.py      # http://127.0.0.1:8099, with the same headers as production
 ```
 
-`python3 build.py --release` also fails while a launch blocker remains (for example an empty Impressum street).
+`python3 build.py --release` also fails while a launch blocker remains (for example the Impressum switched on without a street). The Impressum is off for now; `impressum.enabled` in `site.json` turns it on.
 `python3 build.py --single preview.html` writes the whole site into one self-contained file, used for previews.
 
 Other scripts:
