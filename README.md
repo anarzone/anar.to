@@ -52,6 +52,6 @@ Repository secrets: `DEPLOY_HOST` (the server's address), `DEPLOY_SSH_KEY` (the 
 
 First-time server setup: `server/setup-deploy-user.sh` (creates the deploy user) and `server/nginx/anar.to.conf` (the site's nginx config, behind the Cloudflare Tunnel).
 
-## Copyright
+## License
 
-The words, images and product material are © Anar Hagverdiyev. The fonts keep their own licences (SIL Open Font License or Apache 2.0), and sql.js is MIT-licensed (`assets/vendor/sql.js-1.12.0/LICENSE`).
+The code is MIT-licensed (see `LICENSE`). The words, images and product material (the CV, the Curiplay, Expadu and FocusGuard screens and the café render) are © Anar Hagverdiyev and not covered by it. The fonts keep their own licences (SIL Open Font License or Apache 2.0), and sql.js is MIT-licensed (`assets/vendor/sql.js-1.12.0/LICENSE`).
