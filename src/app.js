@@ -85,7 +85,7 @@
     const issue = e.target.closest('[data-issue], [data-open-issue]');
     if (issue) { showIssue(issue.dataset.issue || issue.dataset.openIssue, issue); return; }
     const go = e.target.closest('[data-goto]');
-    if (go) { gotoSection(go.dataset.goto); return; }
+    if (go) { e.preventDefault(); gotoSection(go.dataset.goto); return; }
     const copy = e.target.closest('[data-copy]');
     if (copy) { copyText($(copy.dataset.copy)?.textContent ?? '', copy); return; }
     const tab = e.target.closest('a.tab');

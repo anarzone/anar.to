@@ -290,6 +290,7 @@ def chrome(html):
     """The masthead and footer from the front page, with links that work from any page."""
     mast = re.search(r'<header class="masthead-z wrap">.*?</header>', html, re.S).group(0)
     mast = mast.replace('href="#top"', 'href="/"').replace('href="#', 'href="/#')
+    mast = re.sub(r'\s*<button class="mm-btn".*?</button>', '', mast, flags=re.S)  # the phone menu needs the front page's script
     foot = re.search(r'<footer class="foot wrap">.*?</footer>', html, re.S).group(0)
     return mast, foot
 

@@ -5,6 +5,7 @@
     <nav class="nav-z" aria-label="Sections">
       <a href="#products">Products</a><a href="#route">Route</a><a href="#playbox">Playbox</a><a href="#zine">Zine</a><a href="#life">Life</a><a href="#contact">Contact</a>
     </nav>
+    <button class="mm-btn" type="button" data-open="menu" aria-haspopup="dialog" aria-controls="menu">Menu <i aria-hidden="true"></i></button>
   </header>
 
   <main>
@@ -217,6 +218,22 @@ LIMIT 20;</pre>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<!-- The phone menu: the masthead's Menu button opens it -->
+<dialog id="menu" class="mm-sheet" aria-label="Menu">
+  <div class="mm-top"><a class="logo-z" href="#top" data-goto="top" aria-label="anar.to, back to the cover">ANAR<span>.TO</span></a><button type="button" class="zd-close" data-close>Close ×</button></div>
+  <nav aria-label="Sections">
+    <ol class="mm-list">
+      <li style="--r: -1.4deg; --d: 0.05s"><a class="mm-ink" href="#products" data-goto="products"><b>01</b><span>Products</span><small>play the demos</small></a></li>
+      <li style="--r: 0.8deg; --d: 0.10s"><a class="mm-pink" href="#route" data-goto="route"><b>02</b><span>Route</span><small>the CV as a stage race</small></a></li>
+      <li style="--r: -0.6deg; --d: 0.15s"><a class="mm-yellow" href="#playbox" data-goto="playbox"><b>03</b><span>Playbox</span><small>the SQL time trial</small></a></li>
+      <li style="--r: 1deg; --d: 0.20s"><a class="mm-blue" href="#zine" data-goto="zine"><b>04</b><span>Zine</span><small>first issue soon</small></a></li>
+      <li style="--r: -1deg; --d: 0.25s"><a class="mm-paper" href="#life" data-goto="life"><b>05</b><span>Life</span><small>the rest of me</small></a></li>
+      <li style="--r: 0.6deg; --d: 0.30s"><a class="mm-night" href="#contact" data-goto="contact"><b>06</b><span>Contact</span><small>tear a strip</small></a></li>
+    </ol>
+  </nav>
+  <p class="issue-z"><span>Nº 01</span><span>Herbst 2026</span><span>Köln</span><span>Gratis</span><span class="colorbar" aria-hidden="true"><i></i><i></i><i></i><i></i></span></p>
+</dialog>
 
 <!-- Zine reader -->
 <dialog id="reader" class="zd" aria-labelledby="zine-h">

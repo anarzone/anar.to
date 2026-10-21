@@ -49,6 +49,31 @@ dialog { color: inherit; }
 .nav-z a { padding: 10px 0; border-bottom: 3px solid transparent; color: var(--ink); text-decoration: none; }
 .nav-z a:hover { border-bottom-color: var(--pink); }
 
+/* ---------- Phone menu: a slim bar whose Menu button opens the sections as riso strips ---------- */
+.mm-btn { display: none; align-items: center; gap: 10px; min-height: 44px; margin-left: auto; padding: 0 16px; border: 3px solid var(--ink); border-radius: 999px; background: var(--yellow); color: var(--ink); font: 900 1.3rem/1 var(--f-display); text-transform: uppercase; box-shadow: 0 4px 0 var(--ink); }
+.mm-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+.mm-btn i { display: grid; gap: 4px; }
+.mm-btn i::before, .mm-btn i::after { content: ""; display: block; width: 18px; height: 3px; background: currentColor; }
+.mm-sheet { box-sizing: border-box; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; border: 0; padding: max(14px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(22px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); flex-direction: column; overflow: auto; background-color: var(--paper); background-image: var(--noise); color: var(--ink); }
+.mm-sheet[open] { display: flex; }
+.mm-sheet::backdrop { background: var(--paper); }
+.mm-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 5px solid var(--ink); }
+.mm-top .logo-z { font-size: 2.2rem; }
+.mm-list { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 12px; }
+.mm-list li { transform: rotate(var(--r, 0deg)); animation: slap 0.45s cubic-bezier(0.2, 1.5, 0.35, 1) backwards; animation-delay: var(--d, 0s); }
+.mm-list a { display: grid; grid-template-columns: auto 1fr; align-items: end; column-gap: 12px; padding: 10px 14px 7px; text-decoration: none; box-shadow: 0.2rem 0.2rem 0 var(--ink); }
+.mm-list a:active { transform: translate(2px, 2px); box-shadow: 0.08rem 0.08rem 0 var(--ink); }
+.mm-list b { grid-row: span 2; align-self: start; padding-top: 6px; font: 700 12px/1 var(--f-type); }
+.mm-list span { font: 900 2.9rem/0.86 var(--f-display); text-transform: uppercase; }
+.mm-list small { font: 700 12px/1.2 var(--f-type); letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.85; }
+.mm-ink { background: var(--ink); color: var(--sheet); }
+.mm-pink { background: var(--pink); color: var(--ink); }
+.mm-yellow { background: var(--yellow); color: var(--ink); }
+.mm-blue { background: var(--blue); color: var(--sheet); }
+.mm-paper { background: var(--sheet); color: var(--ink); }
+.mm-night { background: var(--ink); color: var(--yellow); }
+.mm-sheet .issue-z { margin-top: auto; padding-top: 22px; }
+
 /* ---------- Hero ---------- */
 .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); gap: 36px 56px; padding-block: 48px 72px; }
 .headline { margin: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 0.07em; font: 900 clamp(4rem, 12.4vw, 11.5rem)/0.8 var(--f-display); text-transform: uppercase; letter-spacing: -0.005em; }
@@ -429,6 +454,11 @@ a.arcade { text-decoration: none; }
 }
 @media (max-width: 720px) {
   .life-grid:not(:has(.ride-poster)) .also { grid-template-columns: minmax(0, 1fr); }
+  /* the phone masthead is one slim bar: logo and Menu */
+  .masthead-z:has(.mm-btn) { flex-wrap: nowrap; align-items: center; padding-block: 12px 10px; }
+  .masthead-z:has(.mm-btn) .logo-z { font-size: 2.2rem; }
+  .masthead-z:has(.mm-btn) .issue-z, .masthead-z:has(.mm-btn) .nav-z { display: none; }
+  .mm-btn { display: inline-flex; }
 }
 @media (max-width: 860px) {
   .wall { grid-template-columns: minmax(0, 1fr); }
@@ -465,7 +495,7 @@ a.arcade { text-decoration: none; }
   .pic { width: 72px; height: 72px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .strip, .sticker, .poster, .poster.wiggle, .zd[open] { animation: none; }
+  .strip, .sticker, .poster, .poster.wiggle, .zd[open], .mm-list li { animation: none; }
   .stamp-ring { animation: none; }
   .tab.torn { animation: none; opacity: 0.35; }
 }
