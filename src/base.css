@@ -495,9 +495,6 @@ a.arcade { text-decoration: none; }
   .stickers .st-bib .face { border: 3px solid var(--ink); }
   .stickers .st-bib .face::before { content: none; }
   .stickers .bib-band { margin-bottom: 6px; font-size: 0.7rem; }
-  /* buttons in posters run the full width too, label left and arrow right */
-  .poster .arcade, .pb-card .arcade { display: flex; justify-content: space-between; width: 100%; box-sizing: border-box; }
-  .poster .poster-more { display: flex; justify-content: space-between; width: 100%; box-sizing: border-box; min-height: 46px; margin: 12px 0 0; font-size: 1.2rem; }
   .route-actions .arcade { flex: 1 1 100%; justify-content: space-between; }
   .hero-side { flex-direction: column; align-items: stretch; }
   .stamp { align-self: center; width: 230px; height: 230px; }
