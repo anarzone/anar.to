@@ -59,12 +59,14 @@ dialog { color: inherit; }
 .mm-sheet::backdrop { background: var(--paper); }
 .mm-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 5px solid var(--ink); }
 .mm-top .logo-z { font-size: 2.2rem; }
-.mm-list { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 12px; }
-.mm-list li { transform: rotate(var(--r, 0deg)); animation: slap 0.45s cubic-bezier(0.2, 1.5, 0.35, 1) backwards; animation-delay: var(--d, 0s); }
-.mm-list a { display: grid; grid-template-columns: auto 1fr; align-items: end; column-gap: 12px; padding: 10px 14px 7px; text-decoration: none; box-shadow: 0.2rem 0.2rem 0 var(--ink); }
+.mm-sheet nav { display: flex; flex: 1; min-height: 0; }
+.mm-list { flex: 1; list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-rows: repeat(6, minmax(0, 1fr)); gap: 12px; } /* the six strips share the screen's height */
+.mm-list:focus { outline: none; } /* the menu opens with focus on the list, not on the logo */
+.mm-list li { display: grid; transform: rotate(var(--r, 0deg)); animation: slap 0.45s cubic-bezier(0.2, 1.5, 0.35, 1) backwards; animation-delay: var(--d, 0s); }
+.mm-list a { display: grid; grid-template-columns: auto 1fr; align-content: center; align-items: end; column-gap: 12px; padding: 10px 14px 7px; text-decoration: none; box-shadow: 0.2rem 0.2rem 0 var(--ink); }
 .mm-list a:active { transform: translate(2px, 2px); box-shadow: 0.08rem 0.08rem 0 var(--ink); }
 .mm-list b { grid-row: span 2; align-self: start; padding-top: 6px; font: 700 12px/1 var(--f-type); }
-.mm-list span { font: 900 2.9rem/0.86 var(--f-display); text-transform: uppercase; }
+.mm-list span { font: 900 clamp(2.9rem, 8.2vh, 4.6rem)/0.86 var(--f-display); text-transform: uppercase; }
 .mm-list small { font: 700 12px/1.2 var(--f-type); letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.85; }
 .mm-ink { background: var(--ink); color: var(--sheet); }
 .mm-pink { background: var(--pink); color: var(--ink); }
@@ -72,7 +74,7 @@ dialog { color: inherit; }
 .mm-blue { background: var(--blue); color: var(--sheet); }
 .mm-paper { background: var(--sheet); color: var(--ink); }
 .mm-night { background: var(--ink); color: var(--yellow); }
-.mm-sheet .issue-z { margin-top: auto; padding-top: 22px; }
+.mm-sheet .issue-z { margin-top: 0; padding-top: 18px; }
 
 /* ---------- Hero ---------- */
 .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); gap: 36px 56px; padding-block: 48px 72px; }
@@ -476,6 +478,26 @@ a.arcade { text-decoration: none; }
   .postmark { position: static; justify-self: end; margin-bottom: 8px; }
 }
 @media (max-width: 520px) {
+  /* phones use the full width: one 16 px margin, a headline and titles that span it, stickers spread across it */
+  .wrap { padding-inline: 0; }
+  .headline { font-size: 20vw; }
+  .strip { white-space: nowrap; }
+  .intro { max-width: none; }
+  .stickers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 10px; align-items: center; }
+  .sticker .face { font-size: 2.15rem; }
+  .st-yellow { justify-self: center; } .st-yellow .face { width: 8.8rem; height: 8.8rem; font-size: 1.9rem; }
+  .st-pink { justify-self: center; margin-top: 22px; } .st-pink .face { width: 9.8rem; height: 9.8rem; font-size: 1.6rem; }
+  .st-black { grid-column: 1 / -1; justify-self: start; }
+  .st-blue { grid-column: 1 / -1; justify-self: end; margin-top: -10px; }
+  .st-bib { grid-column: 1 / -1; justify-self: center; margin-top: 4px; } .st-bib .face { width: 11rem; height: 8.4rem; font-size: 3.3rem; }
+  .hint { text-align: center; }
+  .hero-side { flex-direction: column; align-items: stretch; }
+  .stamp { align-self: center; width: 230px; height: 230px; }
+  .press { inset: 50px; font-size: 1.9rem; }
+  .sec-title { font-size: 14.5vw; }
+  .sec-sub { max-width: none; }
+  .pb-card { padding: 22px 18px; }
+  .pb-card .pb-race pre { padding: 12px; font-size: 12px; white-space: pre-wrap; overflow-wrap: anywhere; } /* beats machines.css, which loads later */
   .masthead-z { padding-block: 16px 10px; }
   .p-cp .ink-stamp { display: none; } /* the kicker already says it, and there is no free corner left */
   .nav-z { gap: 0 14px; font-size: 14px; }
