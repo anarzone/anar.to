@@ -301,12 +301,13 @@ SOURCES = {'/': ['src', ':(exclude)src/legal', 'assets/img', 'site.json'],
 
 
 def changed(path):
-    """The day a page's sources last changed in git (deploys need the full history), or today outside a checkout."""
+    """When a page's sources last changed in git, as a full ISO 8601 time (Google wants a time in dateModified, and
+    sitemaps accept it too); deploys need the full history. Outside a checkout, now."""
     if shutil.which('git'):
-        r = subprocess.run(['git', 'log', '-1', '--format=%cs', '--', *SOURCES[path]], cwd=ROOT, capture_output=True, text=True)
+        r = subprocess.run(['git', 'log', '-1', '--format=%cI', '--', *SOURCES[path]], cwd=ROOT, capture_output=True, text=True)
         if r.returncode == 0 and r.stdout.strip():
             return r.stdout.strip()
-    return datetime.date.today().isoformat()
+    return datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds')
 
 
 def structured_data():
