@@ -418,6 +418,7 @@ section[id] { scroll-margin-top: 16px; }
 .postcard h2 { margin: 0 0 12px; font: 900 2.6rem/0.85 var(--f-display); text-transform: uppercase; }
 .postcard label { display: block; margin: 12px 0 4px; font: 700 12px/1.2 var(--f-type); letter-spacing: 0.1em; text-transform: uppercase; }
 .postcard input, .postcard textarea, .postcard select { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 0; border-bottom: 2px solid var(--ink); background: transparent; color: var(--ink); font: 400 16px/1.5 var(--f-body); }
+.postcard input:focus-visible, .postcard textarea:focus-visible, .postcard select:focus-visible { outline: none; } /* the caret shows where you type */
 .postcard textarea { min-height: 150px; resize: vertical; border: 2px solid var(--ink); background: repeating-linear-gradient(transparent 0 31px, rgba(24, 23, 28, 0.12) 31px 32px); line-height: 32px; }
 .postmark { position: absolute; right: 18px; top: 18px; display: grid; place-items: center; width: 84px; height: 96px; background: var(--pink); color: var(--ink); font: 900 1.1rem/1 var(--f-display); text-transform: uppercase; text-align: center; outline: 3px dotted var(--sheet); outline-offset: -6px; transform: rotate(6deg); }
 .to-line { margin: 120px 0 0; font: 400 15px/1.8 var(--f-type); }
