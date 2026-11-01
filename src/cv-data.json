@@ -121,7 +121,7 @@
       ],
       "climbs": [
         {"at": 2026.4, "cat": "1", "name": "Only learning pays: the two-ledger economy", "play": "m-cp"},
-        {"at": 2026.62, "cat": "2", "name": "FSRS-6 in PHP: 0 mismatches in 2,478 reviews"}
+        {"at": 2026.62, "cat": "2", "name": "Anki's review scheduler in PHP: 2,478 reviews, zero differences"}
       ]
     }
   ],
